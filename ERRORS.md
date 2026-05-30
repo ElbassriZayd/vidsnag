@@ -5,3 +5,8 @@ Scan at session start. Add every failure here immediately.
 | Date | Area | What failed | Root cause | Fix |
 |------|------|-------------|------------|-----|
 | 2026-05-29 | Filesystem | File writes failed / corrupted (README.md → 0 bytes) | C: drive 100% full (<50 MB free); ENOSPC truncates open files to 0 bytes | Free disk space; set pagefile AutomaticManagedPagefile=true; reboot; rewrite corrupted files. See global memory feedback_disk_full_silently_kills_pagefile |
+| 2026-05-30 | App icon | Window/taskbar showed the python snake, not VidSnag | WebView2 backend ignores webview.start(icon=) | Set icon via pywin32 WM_SETICON after window load + ctypes AppUserModelID for taskbar |
+| 2026-05-30 | Logo cutout | Background-removal left grey haze / washed-out V | Brightness + single-corner color-distance masks fail on a navy GRADIENT bg | Use saturation matte (max-min channel) — logo is saturated, bg is dull. scripts/cut_logo.py |
+| 2026-05-30 | Website CSS | Page rendered fully unstyled on file:// | Absolute asset paths (/styles.css) resolve to drive root on file:// | Use relative paths (styles.css). Works on file:// AND Vercel |
+| 2026-05-30 | Website mobile | Hero/sub appeared clipped on narrow viewport | Scrolling marquee + ticker (width:max-content flex) forced page width; also Edge headless reported 459px viewport at --window-size=390 (artifact) | overflow:hidden + min-width:0 on wraps, html/body max-width:100vw. Verify with computed clientWidth==scrollWidth, not the screenshot |
+| 2026-05-30 | MCP | 21st.dev magic "Failed to connect" | (a) corrupted npx cache: is-inside-container missing from is-wsl; (b) MCP only attaches at Claude Code startup | rm -rf ~/AppData/Local/npm-cache/_npx (boots clean); RESTART Claude Code to connect |

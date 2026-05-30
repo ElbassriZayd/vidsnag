@@ -1,19 +1,18 @@
 # VidSnag Roadmap
 
-## Phase 0 — Unblock + scaffold (current)
-- Free disk space, set pagefile auto-managed, reboot
-- Rewrite 0-byte README, create PROJECT_STATE/ROADMAP/SKILLS/ERRORS
-- git init + first commit
+## Phase 0 — Unblock + scaffold ✅ DONE
+- Disk freed, scaffold + git init + first commit.
 
-## Phase 1 — Desktop app MVP (core product)
-- Refactor `telecharger.py` → clean `engine.py` (yt-dlp logic)
-- GUI: paste-URL box, quality picker (4K→480p + MP3), download button, progress bar
-- Package to a Windows `.exe` with PyInstaller (bundle yt-dlp + ffmpeg)
+## Phase 1 — Desktop app MVP ✅ DONE (except .exe packaging)
+- engine.py (yt-dlp wrapper), WebView2/pywebview HTML UI, custom dropdown,
+  folder picker, real logo + window icon, playful theme. Engine VERIFIED.
+- REMAINING: package to a single `.exe` (PyInstaller, bundle yt-dlp + ffmpeg) — disk tight.
 
-## Phase 2 — Landing page
-- React/Vite site on Vercel, point vidsnag.xyz at it
-- Download buttons + how-it-works + supporters-wall slot
-- Submit to Google Search Console + sitemap
+## Phase 2 — Landing page ✅ DONE (built), pending DNS
+- Plain HTML/CSS/JS conversion landing (NOT React) on Vercel free CDN.
+- Live at https://vidsnag-ten.vercel.app. NEXT: Porkbun DNS A @→76.76.21.21
+  to point vidsnag.xyz; keep Porkbun nameservers. Then GSC submit.
+- Wire Download→GitHub Releases .exe + donate/tiers→Ko-fi once those exist. + sitemap
 
 ## Phase 3 — Donations
 - Open Payoneer (get US bank details); set up Ko-fi (USD)
