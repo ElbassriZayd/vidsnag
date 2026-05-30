@@ -1,0 +1,5 @@
+yt-dlp
+pywebview
+pywin32
+Pillow
+numpy
