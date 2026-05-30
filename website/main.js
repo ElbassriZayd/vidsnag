@@ -16,20 +16,58 @@ function escapeHtml(s) {
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+const HEART = '<svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z"/></svg>';
+
 function renderWall() {
   const wall = document.getElementById("wall");
   if (!wall) return;
-  const heart = '<svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z"/></svg>';
   wall.innerHTML = FOUNDING.map(n =>
-    `<span class="chip">${heart}${escapeHtml(n)}</span>`
+    `<span class="chip">${HEART}${escapeHtml(n)}</span>`
   ).join("");
   const sup = document.getElementById("supCount");
   if (sup) sup.textContent = "#" + (FOUNDING.length + 1);
 }
 
+// Hero ticker: scroll supporter nicknames so the community is visible up top.
+function renderTicker() {
+  const track = document.getElementById("tickerTrack");
+  if (!track) return;
+  const chips = FOUNDING.map(n => `<span class="t-chip">${HEART}${escapeHtml(n)}</span>`).join("");
+  track.innerHTML = chips + chips; // duplicate for seamless loop
+}
+
+// Donation: tiers are suggestions, custom amount is free choice. Build the Ko-fi
+// link from whatever the user picked (no forced price).
+function wireDonation() {
+  const tiers = Array.from(document.querySelectorAll(".tier"));
+  const custom = document.getElementById("customAmt");
+  const label = document.getElementById("donateLabel");
+  let amount = null;
+
+  const setLabel = () => {
+    if (label) label.textContent = amount ? `Chip in $${amount}` : "Chip in";
+  };
+  const select = (amt, fromTier) => {
+    amount = amt;
+    tiers.forEach(t => t.classList.toggle("active", fromTier === t));
+    if (fromTier && custom) custom.value = "";
+    setLabel();
+  };
+
+  tiers.forEach(t => t.addEventListener("click", () => select(t.dataset.amt, t)));
+  if (custom) custom.addEventListener("input", () => {
+    const v = custom.value.replace(/[^\d.]/g, "");
+    custom.value = v;
+    tiers.forEach(t => t.classList.remove("active"));
+    amount = v ? v : null;
+    setLabel();
+  });
+}
+
 function wireLinks() {
   document.querySelectorAll("#dl-win, #dl-win2").forEach(a => a.setAttribute("href", DOWNLOAD_URL));
-  document.querySelectorAll("#donate, .tier").forEach(a => a.setAttribute("href", DONATE_URL));
+  const donate = document.getElementById("donate");
+  if (donate) donate.setAttribute("href", DONATE_URL);
 }
 
 // sticky nav shadow on scroll
@@ -66,6 +104,8 @@ function wireCountUp() {
 document.addEventListener("DOMContentLoaded", () => {
   wireLinks();
   renderWall();
+  renderTicker();
+  wireDonation();
   wireNav();
   wireCountUp();
 });

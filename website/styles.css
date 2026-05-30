@@ -59,6 +59,28 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
 .sub{max-width:600px;margin:20px auto 0;color:var(--muted);font-size:clamp(15px,2vw,18px);font-weight:600}
 .sub b{color:var(--ink);font-weight:800}
 .cta-row{margin-top:34px;display:flex;flex-direction:column;align-items:center;gap:11px}
+.cta-pair{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-soft{display:inline-flex;align-items:center;gap:9px;font-family:"Baloo 2";font-size:18px;font-weight:700;
+  color:var(--accent);background:#fff;border:2px solid #EADFF7;padding:14px 26px;border-radius:18px;
+  box-shadow:var(--shadow-soft);transition:transform .14s cubic-bezier(.34,1.56,.64,1),background .18s}
+.btn-soft:hover{transform:translateY(-3px);background:#F6F1FF}
+.btn-soft .btn-heart{width:18px;height:18px;fill:var(--rose);stroke:none}
+
+/* supporters ticker */
+.ticker-wrap{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:8px auto 0;
+  padding:14px clamp(18px,5vw,40px)}
+.ticker-label{display:inline-flex;align-items:center;gap:7px;font-family:"Baloo 2";font-weight:700;
+  font-size:13px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.ticker-label .hh{width:15px;height:15px;fill:var(--rose);stroke:none}
+.ticker{position:relative;overflow:hidden;flex:1;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:flex;gap:10px;width:max-content;animation:tick 38s linear infinite}
+.ticker-wrap:hover .ticker-track{animation-play-state:paused}
+.t-chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid #F0E9DD;
+  border-radius:999px;padding:6px 13px;font-size:13px;font-weight:700;white-space:nowrap;box-shadow:var(--shadow-soft)}
+.t-chip .hh{width:12px;height:12px;fill:var(--rose);stroke:none;flex-shrink:0}
+@keyframes tick{to{transform:translateX(-50%)}}
 .trust{margin-top:30px;display:flex;flex-direction:column;gap:6px;align-items:center;
   font-size:14px;font-weight:700;color:var(--muted)}
 .trust b{color:var(--accent)}
@@ -162,8 +184,25 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
 .tier .badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:"Baloo 2";
   font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));
   padding:3px 10px;border-radius:999px;white-space:nowrap}
-.donate-btn{margin-top:18px}
+.donate-btn{margin-top:20px}
 .btn-heart{width:19px;height:19px;fill:#fff;stroke:none}
+
+/* tiers are now selectable buttons */
+.tier{cursor:pointer;font-family:inherit}
+.tier.active{border-color:var(--accent);background:#F6F1FF;
+  box-shadow:0 12px 24px -14px var(--accent)}
+.tier.active .t-ico{background:var(--accent);color:#fff}
+
+/* custom amount */
+.custom-amt{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.ca-label{font-weight:700;color:var(--muted);font-size:15px}
+.ca-field{display:inline-flex;align-items:center;background:var(--bg);border:2px solid #ECE4D6;
+  border-radius:14px;padding:4px 14px;transition:border-color .18s;width:180px}
+.ca-field:focus-within{border-color:var(--accent)}
+.ca-cur{font-family:"Baloo 2";font-weight:800;font-size:18px;color:var(--muted)}
+.ca-field input{border:none;background:transparent;outline:none;font-family:"Baloo 2";font-weight:700;
+  font-size:18px;color:var(--ink);width:100%;padding:10px 4px}
+.ca-field input::placeholder{color:var(--faint);font-size:15px;font-weight:600}
 .donate-note{margin-top:12px;font-size:13px;font-weight:700;color:var(--faint)}
 
 /* faq */
