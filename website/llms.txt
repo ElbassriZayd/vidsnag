@@ -1,0 +1,21 @@
+# VidSnag
+
+VidSnag is a free desktop application for Windows that downloads videos from
+YouTube and hundreds of other websites in a quality the user chooses.
+
+## Key facts
+- Price: free. Every feature is free, with no trial or paywall. Donations are optional.
+- Platform: Windows desktop app.
+- Privacy: downloads run on the user's own computer. Nothing is uploaded or tracked.
+- No ads, no pop-ups, no account or sign-up required.
+- Download engine: the open-source yt-dlp project.
+- Supported sites: YouTube, Vimeo, TikTok, X, Facebook, Twitch and many more.
+- Output: video up to 4K, or audio-only MP3, saved to a folder the user picks.
+- Funding: supported by voluntary donations via Ko-fi, with a public supporters wall.
+
+## Responsible use
+Users are responsible for what they download and should respect copyright and the
+terms of service of each site.
+
+## Links
+- Website: https://vidsnag.xyz/

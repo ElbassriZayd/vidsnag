@@ -3,82 +3,218 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VidSnag — Free video downloader for your computer</title>
-<meta name="description" content="VidSnag is a free desktop app to download videos from YouTube and more, in the quality you choose. Runs on your own computer. Supported by donations." />
+<title>VidSnag — Free Video Downloader for Windows (No Ads)</title>
+<meta name="description" content="VidSnag is a free desktop app to download videos from YouTube and hundreds of sites in any quality. No ads, no sign-up, no pop-ups. Runs on your own computer." />
+<meta property="og:title" content="VidSnag — Free Video Downloader, no ads, no sketchy sites" />
+<meta property="og:description" content="Paste a link, pick a quality, download. Free desktop app that runs on your own computer." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://vidsnag.xyz/assets/logo-512.png" />
+<meta name="theme-color" content="#FBF7F0" />
+<link rel="canonical" href="https://vidsnag.xyz/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 <link rel="icon" href="assets/logo-64.png" type="image/png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "VidSnag",
+  "operatingSystem": "Windows",
+  "applicationCategory": "MultimediaApplication",
+  "description": "Free desktop app to download videos from YouTube and hundreds of sites in any quality. No ads, no sign-up. Runs on your own computer.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://vidsnag.xyz/"
+}
+</script>
 </head>
 <body>
-  <header class="nav">
+  <header class="nav" id="nav">
     <a class="brand" href="./">
-      <img class="logo" src="assets/logo-256.png" alt="VidSnag" />
+      <img class="logo" src="assets/logo-256.png" alt="VidSnag logo" width="36" height="36" />
       VidSnag
     </a>
     <nav class="nav-links">
       <a href="#how">How it works</a>
-      <a href="#supporters">Supporters</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
       <a class="btn-sm" href="#download">Download</a>
     </nav>
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero">
-      <div class="glow"></div>
-      <img class="hero-mark" src="assets/logo-512.png" alt="VidSnag logo" />
-      <span class="pill">FREE · NO ACCOUNT · NO ADS</span>
-      <h1>Grab any video,<br><span class="grad">in the quality you want.</span></h1>
-      <p class="sub">VidSnag is a free little desktop app. Paste a link, pick a quality, done.
-        Everything runs on <b>your own computer</b>, nothing uploaded, nothing tracked.</p>
+      <img class="hero-mark" src="assets/logo-512.png" alt="VidSnag" width="124" height="124" />
+      <span class="pill">FREE · NO ADS · NO SIGN-UP</span>
+      <h1>Download videos<br><span class="grad">without the sketchy sites.</span></h1>
+      <p class="sub">VidSnag is a free desktop app that grabs videos from YouTube and hundreds
+        of other sites, in the quality <b>you</b> choose. No pop-ups, no watermarks, no account.
+        Everything runs on <b>your own computer</b>.</p>
+
       <div class="cta-row" id="download">
         <a class="btn-cta" href="#" id="dl-win">
           <svg viewBox="0 0 24 24" class="win"><path d="M3 5.5L10 4.5v7H3zM11 4.3L21 3v8.5H11zM3 12.5h7v7l-7-1zM11 12.5h10V21l-10-1.3z"/></svg>
-          Download for Windows
+          Download free for Windows
         </a>
-        <span class="cta-note">Free forever · takes seconds to set up</span>
+        <span class="cta-note">Free forever · no account · tiny download</span>
+      </div>
+
+      <div class="trust">
+        <span class="trust-count">Join the first <b id="userCount">500</b> people trying VidSnag</span>
+        <span class="trust-stars">★★★★★ <i>built for people who hate ad-sites</i></span>
       </div>
     </section>
 
+    <!-- PAIN STRIP -->
+    <section class="pain">
+      <h2>Tired of this?</h2>
+      <div class="pain-grid">
+        <div class="pain-card bad">
+          <span class="pc-ico">✕</span><h3>Pop-ups everywhere</h3>
+          <p>Three new tabs open before the download even starts.</p>
+        </div>
+        <div class="pain-card bad">
+          <span class="pc-ico">✕</span><h3>Fake download buttons</h3>
+          <p>You click "Download" and get a virus installer instead.</p>
+        </div>
+        <div class="pain-card bad">
+          <span class="pc-ico">✕</span><h3>Capped at 720p, watermarked</h3>
+          <p>The "free" version cripples quality to upsell you.</p>
+        </div>
+      </div>
+      <p class="pain-after">VidSnag does <b>none</b> of that. It's just a clean little app on your computer.</p>
+    </section>
+
+    <!-- HOW IT WORKS -->
     <section class="how" id="how">
-      <h2>How it works</h2>
+      <h2>Three steps. That's it.</h2>
       <div class="steps">
-        <div class="step">
-          <span class="num">1</span>
-          <h3>Paste a link</h3>
-          <p>Copy any video URL and drop it into VidSnag.</p>
-        </div>
-        <div class="step">
-          <span class="num">2</span>
-          <h3>Pick a quality</h3>
-          <p>From crisp 4K down to 480p, or audio-only MP3. Your call.</p>
-        </div>
-        <div class="step">
-          <span class="num">3</span>
-          <h3>Grab it</h3>
-          <p>Saves straight to the folder you choose. That's it!</p>
-        </div>
+        <div class="step"><span class="num">1</span><h3>Paste a link</h3>
+          <p>Copy any video URL and drop it into VidSnag.</p></div>
+        <div class="step"><span class="num">2</span><h3>Pick a quality</h3>
+          <p>From crisp 4K down to 480p, or audio-only MP3. Your call.</p></div>
+        <div class="step"><span class="num">3</span><h3>Grab it</h3>
+          <p>Saves straight to the folder you choose. Done!</p></div>
       </div>
     </section>
 
+    <!-- DEMO -->
+    <section class="demo">
+      <div class="demo-text">
+        <h2>See it in action</h2>
+        <p>Paste, fetch, pick, download. The whole thing fits in one little window,
+          no menus to dig through, no settings to learn.</p>
+        <ul class="demo-list">
+          <li>Live preview with thumbnail and title</li>
+          <li>Real-time progress and speed</li>
+          <li>Choose exactly where files land</li>
+        </ul>
+      </div>
+      <div class="demo-frame">
+        <div class="demo-bar"><span></span><span></span><span></span></div>
+        <img src="assets/app-demo.png" alt="The VidSnag app downloading a video" loading="lazy" />
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <h2>Everything you'd want. Nothing you wouldn't.</h2>
+      <div class="feat-grid">
+        <div class="feat" style="--f:#7C5CFC"><span class="fi">◆</span><h3>Up to 4K</h3><p>Grab the sharpest version a video offers, or step down to save space.</p></div>
+        <div class="feat" style="--f:#37D399"><span class="fi">♪</span><h3>MP3 audio</h3><p>Just want the sound? Pull audio-only and skip the video entirely.</p></div>
+        <div class="feat" style="--f:#FF9A6C"><span class="fi">∞</span><h3>Hundreds of sites</h3><p>YouTube, Vimeo, TikTok, X, Facebook and many more, one app.</p></div>
+        <div class="feat" style="--f:#5BC0EB"><span class="fi">⛌</span><h3>Zero ads</h3><p>No pop-ups, no redirects, no fake buttons. Ever.</p></div>
+        <div class="feat" style="--f:#F25F9C"><span class="fi">⌂</span><h3>Stays private</h3><p>Downloads run on your machine. Nothing is uploaded or tracked.</p></div>
+        <div class="feat" style="--f:#9D8BFF"><span class="fi">✦</span><h3>Always free</h3><p>Every feature, no paywall, no trial. Tips keep it alive.</p></div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <section class="marquee-wrap" aria-hidden="true">
+      <div class="marquee">
+        <span>YouTube</span><span>Vimeo</span><span>TikTok</span><span>X</span><span>Facebook</span>
+        <span>Twitch</span><span>Dailymotion</span><span>Reddit</span><span>SoundCloud</span>
+        <span>YouTube</span><span>Vimeo</span><span>TikTok</span><span>X</span><span>Facebook</span>
+        <span>Twitch</span><span>Dailymotion</span><span>Reddit</span><span>SoundCloud</span>
+      </div>
+    </section>
+
+    <!-- SUPPORTERS -->
     <section class="support" id="supporters">
       <h2>Powered by people like you</h2>
-      <p class="support-sub">VidSnag is free and always will be. If it saved you time,
-        leave a tip and your nickname joins the wall below.</p>
-      <a class="btn-ghost" href="#" id="donate">♥ Support VidSnag</a>
+      <p class="support-sub">VidSnag is free and always will be. These are the founding supporters
+        keeping it going, leave a tip and your nickname joins them.</p>
+      <div class="wall" id="wall"></div>
+      <p class="wall-counter">Be supporter <b id="supCount">#19</b></p>
+    </section>
 
-      <div class="wall" id="wall">
-        <div class="wall-empty">Be the first supporter — your nickname will show here.</div>
+    <!-- DONATION -->
+    <section class="donate" id="donate-block">
+      <div class="donate-card">
+        <h2>VidSnag is free. Tipping keeps it alive.</h2>
+        <p>It's made by one person. Tips cover the time keeping VidSnag working when sites
+          change their players. You never need to tip to use anything, it just helps a lot.</p>
+        <div class="tiers">
+          <a class="tier" href="#" data-tip="3"><span class="emoji">☕</span><b>$3</b><span>a coffee</span></a>
+          <a class="tier best" href="#" data-tip="5"><span class="badge">most loved</span><span class="emoji">🍕</span><b>$5</b><span>a slice</span></a>
+          <a class="tier" href="#" data-tip="10"><span class="emoji">🚀</span><b>$10</b><span>a hero</span></a>
+        </div>
+        <a class="btn-cta donate-btn" href="#" id="donate">♥ Support VidSnag</a>
+        <p class="donate-note">One-time · no account needed · secure via Ko-fi</p>
       </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <h2>Questions, answered</h2>
+      <div class="faq-list" id="faqList">
+        <details><summary>Is VidSnag really free?</summary><p>Yes, every feature, forever. There's no trial, no paywall, no "pro" version. Tips are optional and just help keep it maintained.</p></details>
+        <details><summary>Is it safe? Any viruses or adware?</summary><p>VidSnag runs locally on your computer and bundles no adware or junk, the opposite of the spammy download sites. The download engine is the well-known open-source yt-dlp.</p></details>
+        <details><summary>Do I need an account?</summary><p>No. Open the app, paste a link, download. Nothing to sign up for.</p></details>
+        <details><summary>Which sites work?</summary><p>YouTube plus hundreds of others (Vimeo, TikTok, X, Facebook, Twitch and more), powered by the yt-dlp engine.</p></details>
+        <details><summary>Where do my downloads go?</summary><p>To a folder you choose. It defaults to a VidSnag folder in Downloads, and you can change it anytime.</p></details>
+        <details><summary>Is downloading videos legal?</summary><p>You're responsible for what you download. Respect copyright and each site's terms of service, and only download content you have the right to save.</p></details>
+        <details><summary>Why donate if it's free?</summary><p>VidSnag is built and maintained by one person. When sites change, the app needs updates to keep working. Tips fund that time, so it stays free for everyone.</p></details>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final">
+      <h2>Ready to grab your first video?</h2>
+      <a class="btn-cta" href="#" id="dl-win2">
+        <svg viewBox="0 0 24 24" class="win"><path d="M3 5.5L10 4.5v7H3zM11 4.3L21 3v8.5H11zM3 12.5h7v7l-7-1zM11 12.5h10V21l-10-1.3z"/></svg>
+        Download free for Windows
+      </a>
+      <p class="cta-note">Free forever · no account · tiny download</p>
     </section>
   </main>
 
   <footer class="foot">
-    <span>VidSnag · free video downloader</span>
-    <span class="muted">Runs on your computer. You are responsible for what you download.</span>
+    <div class="ghost">VidSnag</div>
+    <div class="foot-row">
+      <span>VidSnag · free video downloader</span>
+      <span class="muted">Runs on your computer. You are responsible for what you download.</span>
+    </div>
   </footer>
 
   <script src="main.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Is VidSnag really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, every feature, forever. No trial, no paywall. Tips are optional."}},
+      {"@type":"Question","name":"Is it safe? Any viruses or adware?","acceptedAnswer":{"@type":"Answer","text":"VidSnag runs locally and bundles no adware. The engine is the open-source yt-dlp."}},
+      {"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No account is needed. Open the app, paste a link, download."}},
+      {"@type":"Question","name":"Which sites work?","acceptedAnswer":{"@type":"Answer","text":"YouTube plus hundreds of others including Vimeo, TikTok, X, Facebook and Twitch."}},
+      {"@type":"Question","name":"Where do my downloads go?","acceptedAnswer":{"@type":"Answer","text":"To a folder you choose, defaulting to a VidSnag folder in Downloads."}},
+      {"@type":"Question","name":"Is downloading videos legal?","acceptedAnswer":{"@type":"Answer","text":"You are responsible for what you download. Respect copyright and each site's terms."}},
+      {"@type":"Question","name":"Why donate if it's free?","acceptedAnswer":{"@type":"Answer","text":"It is made by one person. Tips fund the time to keep it working when sites change."}}
+    ]
+  }
+  </script>
 </body>
 </html>
