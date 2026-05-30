@@ -101,6 +101,19 @@ function wireCountUp() {
   io.observe(el);
 }
 
+function wireMobileMenu() {
+  const btn = document.getElementById("navToggle");
+  const menu = document.getElementById("mobileMenu");
+  if (!btn || !menu) return;
+  const close = () => { btn.classList.remove("open"); menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); };
+  btn.addEventListener("click", () => {
+    const open = menu.classList.toggle("open");
+    btn.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", String(open));
+  });
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", close));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   wireLinks();
   renderWall();
@@ -108,4 +121,5 @@ document.addEventListener("DOMContentLoaded", () => {
   wireDonation();
   wireNav();
   wireCountUp();
+  wireMobileMenu();
 });
