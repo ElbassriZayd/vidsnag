@@ -38,4 +38,5 @@ exe = EXE(
     upx=False,
     console=False,
     icon="app/web/assets/vidsnag.ico",
+    version="version.txt",
 )
