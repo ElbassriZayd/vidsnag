@@ -95,10 +95,10 @@ def main():
         "VidSnag",
         HTML_PATH,
         js_api=api,
-        width=580,
-        height=560,
-        min_size=(520, 520),
-        background_color="#0B0D12",
+        width=560,
+        height=720,          # tall enough that nothing is clipped on open
+        min_size=(460, 600),
+        background_color="#FBF7F0",
     )
     api.set_window(window)
     icon = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
