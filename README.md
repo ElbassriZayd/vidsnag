@@ -12,8 +12,8 @@ Supported by voluntary donations, with a public supporters wall.
 
 | Folder | What it is | Stack |
 |--------|-----------|-------|
-| `app/` | The desktop app users install (.exe) | Python + `yt-dlp` + GUI, packaged with PyInstaller |
-| `website/` | Landing page + supporters wall | React/Vite on Vercel + Supabase + Ko-fi webhook |
+| `app/` | The desktop app users install (.exe) | Python + `yt-dlp` + pywebview/WebView2, packaged with PyInstaller (`vidsnag.spec`). Released at github.com/ElbassriZayd/vidsnag |
+| `website/` | Landing page (+ supporters wall) | Plain HTML/CSS/JS on Vercel (NOT React). Supabase + Ko-fi webhook planned for the wall |
 
 ## Existing files (the starting point)
 

@@ -5,7 +5,7 @@ Last updated: 2026-05-30
 ---
 
 ## Current milestone
-Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vidsnag.xyz live.
+App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all live on Vercel prod alias. Free trust signals shipped (open-source + VirusTotal + checksum). Remaining: donate wiring (needs user link), DNS, merge branch, free code-signing.
 
 ## Completed
 - 2026-05-29 Product decided: VidSnag, free desktop video downloader, donation-funded
@@ -32,13 +32,18 @@ Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vid
 
 ## In progress
 - DOWNLOAD live. DONATE still pending USER input: user has Binance + PayPal; advised lead with Binance USDT (privacy + Morocco payout), PayPal only as Business acct (name exposure + downloader-freeze risk). Need the actual USDT address(+network)/PayPal.me handle to set DONATE_URL (one-liner). Branch `feat/landing-redesign` not merged. DNS at Porkbun still pending to take vidsnag.xyz live.
-- TODO later: code-sign the .exe (SmartScreen warns unsigned); slim ffmpeg to essentials build to shrink .exe.
+- 2026-05-30 TRUST pass (user hit SmartScreen "not commonly downloaded" — it's REPUTATION not virus; only signing removes it). User chose FREE path. Done: (1) embedded version/publisher metadata in exe (reduces AV false-positives), rebuilt+re-released, new SHA-256 f98a4735... (2) OPEN-SOURCED the app MIT to public github.com/ElbassriZayd/vidsnag (engine+desktop+web only, NO business docs) + reproducible GitHub Actions Windows build (slim essentials ffmpeg, commented SignPath signing step ready). (3) Site FAQ+footer link to source + checksum-verify messaging. (4) FAQ entry explaining the SmartScreen banner.
+- 2026-05-30 VirusTotal: uploaded VidSnag.exe via Playwright (headed msedge, anon upload). Result 1/69 — only Bkav Pro (notorious PyInstaller false-positive engine); Microsoft Defender + all majors UNDETECTED. Badged on site FAQ. Stable report: virustotal.com/gui/file/f98a4735f055c7675ae72e691734f18feac943dd10b00bb84cd1722bc21575fb
+- NOTE: Microsoft wdsi/filesubmission is NOT useful here (Defender already passes; that portal only helps when Defender itself flags). SmartScreen reputation is built by signing + download volume, not file submission. Real free lever = SignPath OSS signing (caveat: Foundation usually wants an established/popular project, a day-old repo may be deferred until traction).
+- FREE signing path = SignPath Foundation (needs OSS — now eligible). USER ACTIONS pending: apply to SignPath (signpath.org), submit exe as safe to microsoft.com/wdsi/filesubmission, upload to virustotal.com + send link for a "verified clean" site badge. SignPath gives OV (not instant SmartScreen clear; reputation builds faster). EV (~$300/yr) is the only instant-trust option, declined for now.
+- TODO later: slim local build to essentials ffmpeg too; tag a release to exercise the CI build; add VirusTotal badge once user sends link.
 
 ## Next steps (in order)
-1. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to Google Search Console.
-2. Wire real links: Download btn -> .exe (GitHub Releases), donate/tiers -> Ko-fi (needs Payoneer first).
-3. Package desktop app to single .exe (PyInstaller, bundle yt-dlp + ffmpeg) — disk tight (~3.4 GB free).
-4. Donations (Payoneer US-bank route + Ko-fi + crypto) + supporters-wall backend (Supabase + Ko-fi webhook) so real donors append with $ amounts.
+1. DONATE wiring (USER): paste Binance USDT address(+network) and/or PayPal.me handle → set DONATE_URL in website/main.js (one-liner; crypto = copy+QR card). Tabs already opened in browser.
+2. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to GSC.
+3. MERGE branch `feat/landing-redesign` -> master (deployed but unmerged).
+4. SignPath Foundation OSS signing application (USER login) when repo has some traction; then uncomment the signing step in .github/workflows/build.yml.
+5. Supporters-wall backend (Supabase + Ko-fi/crypto webhook) so real donors append with amounts.
 
 ## Blocked / waiting
 - DNS step is user-side (no Porkbun API creds saved; needs dashboard login).

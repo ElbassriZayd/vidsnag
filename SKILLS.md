@@ -7,11 +7,29 @@
 - Adapted: existing telecharger.py to be refactored into engine.py
 - Date added: 2026-05-29
 
-## Desktop packaging (planned)
-- Source: PyInstaller
-- Type: tool
-- Why chosen: bundle Python + yt-dlp + ffmpeg into a single Windows .exe
-- Date added: 2026-05-29 (planned)
+## Desktop packaging — PyInstaller (ADOPTED 2026-05-30)
+- Source: PyInstaller 6.20, onefile. `vidsnag.spec` + `vidsnag_main.py` entry.
+- Bundles ffmpeg.exe+ffprobe.exe (binaries=[...,'.']) + app/web datas; engine.py
+  finds them via `sys._MEIPASS`; desktop.py resolves web/+icon frozen-aware.
+- `version.txt` (VSVersionInfo) embeds publisher metadata → fewer AV false-positives.
+- Spec reads `FFMPEG_DIR` env (CI) with local winget fallback. Output ~189MB.
+- Date added: 2026-05-30
+
+## CI build — GitHub Actions (ADOPTED, public repo)
+- `.github/workflows/build.yml` on the public repo: Windows runner, downloads slim
+  essentials ffmpeg, builds the exe, attaches to release on tag. Reproducible build =
+  trust signal. SignPath signing step pre-wired (commented until approval).
+
+## Distribution + trust (ADOPTED 2026-05-30)
+- Public repo github.com/ElbassriZayd/vidsnag (MIT) — source auditable; binary on Releases.
+- SHA-256 published in release notes. VirusTotal verified (Playwright headed-msedge anon
+  upload): 1/69 (Bkav false-positive only), badged on site FAQ.
+- SmartScreen "not commonly downloaded" = reputation, only signing removes it.
+  SignPath Foundation = FREE OSS signing (PLANNED, needs traction); EV cert = paid instant.
+
+## Coming-soon modal — native <dialog> (ADOPTED)
+- main.js opens a native `<dialog>` (focus trap + Esc free) for Download/Donate until
+  DOWNLOAD_URL/DONATE_URL are set; set the const → buttons become real links (one-liner).
 
 ## Desktop GUI shell — pywebview + WebView2 (ADOPTED)
 - Renders the HTML/CSS UI in a native window via Windows' built-in WebView2 (no Chromium bundle).
@@ -26,6 +44,10 @@
 - No framework/build; faster, cheaper, handles traffic on CDN. RELATIVE asset paths (absolute broke file://).
 - Conversion landing built with marketing-psychology + copywriting + editorial-web-moves skills.
 - SEO: SoftwareApplication + FAQPage JSON-LD, OG, canonical, llms.txt, robots, sitemap.
+- 2026-05-30 REDESIGN (product-led): decoded category refs (Screen Studio + cobalt.tools,
+  NOT manzili's look) → app-window-on-glow hero + paste-teaser + single CTA + ONE dark
+  donation band. ui-ux-pro-max a11y pass: native <dialog> modal, focus-visible rings,
+  WCAG-AA text contrast, 44px touch targets, aria-pressed tiers.
 - Date added: 2026-05-30
 
 ## Donations + supporters wall (planned)
