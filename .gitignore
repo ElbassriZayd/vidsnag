@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+env_video/
+venv/
+.venv/
+
+# Downloaded media — NEVER commit
+videos/
+*.mp4
+*.webm
+*.mp3
+*.m4a
+*.part
+*.ytdl
+
+# Desktop app build artifacts
+build/
+dist/
+*.spec
+
+# Website
+website/node_modules/
+website/dist/
+website/.vercel/
+
+# Secrets
+.env
+.env.local
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
