@@ -12,6 +12,7 @@ import webview
 from app import engine
 
 HTML_PATH = os.path.join(os.path.dirname(__file__), "web", "index.html")
+ICON_PATH = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
 
 
 def _default_download_dir():
@@ -89,7 +90,45 @@ class Api:
         return {"ok": True}
 
 
+def _set_app_id():
+    """Give the process its own taskbar identity so Windows shows our icon
+    instead of grouping under pythonw.exe."""
+    try:
+        import ctypes
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("VidSnag.App")
+    except Exception:
+        pass
+
+
+def _set_window_icon():
+    """Replace the inherited python icon with VidSnag's, in title bar + taskbar.
+
+    The WebView2 backend ignores webview.start(icon=...), so we set it directly
+    via the Win32 API once the window exists. Best-effort: silently no-ops if
+    pywin32 is missing or the window can't be found.
+    """
+    try:
+        import win32con
+        import win32gui
+    except Exception:
+        return
+
+    hwnd = win32gui.FindWindow(None, "VidSnag")
+    if not hwnd:
+        return
+    try:
+        big = win32gui.LoadImage(0, ICON_PATH, win32con.IMAGE_ICON, 256, 256,
+                                 win32con.LR_LOADFROMFILE)
+        small = win32gui.LoadImage(0, ICON_PATH, win32con.IMAGE_ICON, 32, 32,
+                                   win32con.LR_LOADFROMFILE)
+        win32gui.SendMessage(hwnd, win32con.WM_SETICON, win32con.ICON_BIG, big)
+        win32gui.SendMessage(hwnd, win32con.WM_SETICON, win32con.ICON_SMALL, small)
+    except Exception:
+        pass
+
+
 def main():
+    _set_app_id()
     api = Api()
     window = webview.create_window(
         "VidSnag",
@@ -101,9 +140,12 @@ def main():
         background_color="#FBF7F0",
     )
     api.set_window(window)
-    icon = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
+
+    # set the taskbar/title-bar icon once the native window exists
+    window.events.loaded += _set_window_icon
+
     try:
-        webview.start(icon=icon)
+        webview.start(icon=ICON_PATH)
     except TypeError:
         webview.start()
 
