@@ -5,14 +5,27 @@ user's machine. Progress is pushed back to JS via window.evaluate_js.
 Run: python -m app.desktop
 """
 import os
+import sys
 import threading
 
 import webview
 
 from app import engine
 
-HTML_PATH = os.path.join(os.path.dirname(__file__), "web", "index.html")
-ICON_PATH = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
+
+def _res(*parts):
+    """Resolve a bundled resource both from source and from the frozen build.
+
+    When packaged by PyInstaller (onefile), web/ ships at app/web under the
+    extraction dir (sys._MEIPASS); from source it sits next to this file.
+    """
+    if getattr(sys, "frozen", False):
+        return os.path.join(sys._MEIPASS, "app", *parts)
+    return os.path.join(os.path.dirname(__file__), *parts)
+
+
+HTML_PATH = _res("web", "index.html")
+ICON_PATH = _res("web", "assets", "vidsnag.ico")
 
 
 def _default_download_dir():

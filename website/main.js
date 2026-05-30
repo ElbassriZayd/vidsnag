@@ -4,8 +4,8 @@
 // automatically (no other change needed):
 //   DOWNLOAD_URL = "https://github.com/<you>/vidsnag/releases/latest";
 //   DONATE_URL   = "https://ko-fi.com/<you>";   // amount is appended as ?amount=N
-const DOWNLOAD_URL = null; // null → show the "almost ready" modal
-const DONATE_URL = null;   // null → show the "opens soon" modal
+const DOWNLOAD_URL = "https://github.com/ElbassriZayd/vidsnag/releases/latest/download/VidSnag.exe";
+const DONATE_URL = null;   // null → show the "opens soon" modal (set to a Ko-fi/PayPal/crypto link to enable)
 
 // Founding supporters (no dollar amounts — hearts only). Real Ko-fi donors will
 // later be appended by the backend WITH amounts and mix in among these.
