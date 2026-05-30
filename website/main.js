@@ -19,8 +19,9 @@ function escapeHtml(s) {
 function renderWall() {
   const wall = document.getElementById("wall");
   if (!wall) return;
+  const heart = '<svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z"/></svg>';
   wall.innerHTML = FOUNDING.map(n =>
-    `<span class="chip"><span class="hh">♥</span>${escapeHtml(n)}</span>`
+    `<span class="chip">${heart}${escapeHtml(n)}</span>`
   ).join("");
   const sup = document.getElementById("supCount");
   if (sup) sup.textContent = "#" + (FOUNDING.length + 1);
