@@ -22,8 +22,10 @@ Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vid
 - 2026-05-30 Pre-launch fixes: mobile hamburger menu, mobile headline 25px, marquee+ticker overflow contained (verified clientWidth==scrollWidth, no horizontal overflow).
 - 2026-05-30 Deploy decision: VERCEL (not the CaféOS/mail VPS — contamination risk to email reputation). Static landing on Vercel free CDN; .exe will go on GitHub Releases. Vercel project "vidsnag" exists; prod alias https://vidsnag-ten.vercel.app is LIVE (200). vidsnag.xyz added to project but NOT pointed yet.
 
+- 2026-05-30 Landing REDESIGN (product-led pass): hand-built page read "generic template" (empty hero, app screenshot buried, single cream rhythm all the way down, no contrast). Fixed via the manzili METHOD (decode category references, not manzili's look): decoded Screen Studio (product-window-on-glow-stage hero) + cobalt.tools (paste-box-as-hero). Rebuilt hero = big app window on warm purple→mint→peach gradient-glow stage + fake "paste a link" teaser pill (4K·1080p·MP3 chips + Get) + ONE primary CTA (demoted "Chip in" to ghost link) + bigger headline (mobile 25→33px, fixed br-collision). Turned donation block into the page's one DARK contrast band. Retired the now-duplicate "See it in action" demo section (hero does that job). Verified local: no horizontal overflow desktop+mobile, screenshots reviewed. NOT yet deployed (live Vercel still old build).
+
 ## In progress
-- Website done; waiting to set DNS at Porkbun to take vidsnag.xyz live.
+- Landing redesign done locally + verified; NOT pushed/redeployed yet. Still waiting to set DNS at Porkbun to take vidsnag.xyz live.
 
 ## Next steps (in order)
 1. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to Google Search Console.
