@@ -313,6 +313,9 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
 .foot-row{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
   font-size:13.5px;font-weight:600;color:var(--muted);margin-top:-10px}
 .foot .muted{color:var(--faint)}
+.foot-link{color:var(--accent);font-weight:700;box-shadow:inset 0 -1px 0 #CDBBF6}
+.foot-link:hover{color:var(--accent-press)}
+.faq details a{color:var(--accent);font-weight:700}
 
 @media (max-width:760px){
   .pain-grid,.steps,.feat-grid,.tiers{grid-template-columns:1fr}

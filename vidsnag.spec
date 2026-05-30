@@ -5,7 +5,11 @@ import os
 from PyInstaller.utils.hooks import collect_submodules
 
 # ffmpeg + ffprobe are bundled so the app works with no system install.
-FF = r"C:\Users\ME\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1-full_build\bin"
+# CI sets FFMPEG_DIR; falls back to the local winget path for dev builds.
+FF = os.environ.get(
+    "FFMPEG_DIR",
+    r"C:\Users\ME\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1-full_build\bin",
+)
 
 hidden = collect_submodules("yt_dlp") + ["win32gui", "win32con"]
 
