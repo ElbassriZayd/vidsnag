@@ -88,7 +88,7 @@
       </div>
 
       <div class="trust">
-        <span class="trust-stars">★★★★★ <i>built by the community, for people who hate ad-sites</i></span>
+        <span class="trust-stars"><span aria-hidden="true">★★★★★</span> <i>built by the community, for people who hate ad-sites</i></span>
       </div>
     </section>
 
@@ -247,6 +247,19 @@
       <span class="muted">Runs on your computer. You are responsible for what you download.</span>
     </div>
   </footer>
+
+  <!-- coming-soon dialog (content swapped per trigger by main.js) -->
+  <dialog class="modal" id="soonModal" aria-labelledby="soonTitle">
+    <div class="modal-card">
+      <button class="modal-x" id="soonClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <span class="modal-ico" id="soonIco" aria-hidden="true"></span>
+      <h3 id="soonTitle">Almost ready!</h3>
+      <p id="soonBody">The Windows build drops very soon.</p>
+      <button class="btn-cta modal-ok" id="soonOk" type="button">Got it</button>
+    </div>
+  </dialog>
 
   <script src="main.js" defer></script>
 

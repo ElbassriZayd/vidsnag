@@ -24,8 +24,12 @@ Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vid
 
 - 2026-05-30 Landing REDESIGN (product-led pass): hand-built page read "generic template" (empty hero, app screenshot buried, single cream rhythm all the way down, no contrast). Fixed via the manzili METHOD (decode category references, not manzili's look): decoded Screen Studio (product-window-on-glow-stage hero) + cobalt.tools (paste-box-as-hero). Rebuilt hero = big app window on warm purple→mint→peach gradient-glow stage + fake "paste a link" teaser pill (4K·1080p·MP3 chips + Get) + ONE primary CTA (demoted "Chip in" to ghost link) + bigger headline (mobile 25→33px, fixed br-collision). Turned donation block into the page's one DARK contrast band. Retired the now-duplicate "See it in action" demo section (hero does that job). Verified local: no horizontal overflow desktop+mobile, screenshots reviewed. NOT yet deployed (live Vercel still old build).
 
+- 2026-05-30 Landing redesign SHIPPED: committed on branch `feat/landing-redesign` + `vercel --prod`. LIVE + verified on https://vidsnag-ten.vercel.app (new-build marker confirmed). vidsnag.xyz still HTTP 000 (DNS not pointed — unchanged user-side step).
+
+- 2026-05-30 UX/UI pass (ui-ux-pro-max): all 3 dead "#" buttons now functional via an accessible native `<dialog>` "coming-soon" modal (Download → "Almost ready!", Donate → amount-aware "opens soon"). FUTURE-PROOFED: set DOWNLOAD_URL / DONATE_URL consts in main.js and buttons auto-become real links (Ko-fi gets ?amount=N). a11y: focus-visible rings everywhere, body text contrast darkened to WCAG AA (--muted #8A8398→#645D77, --faint→#736C86), nav-toggle 44px touch target, tiers aria-pressed, decorative stars aria-hidden, Esc closes modal+menu, focus restored to trigger on close. Verified via Playwright: modal open/close/Esc, amount-aware copy, zero console errors, no overflow desktop+mobile.
+
 ## In progress
-- Landing redesign done locally + verified; NOT pushed/redeployed yet. Still waiting to set DNS at Porkbun to take vidsnag.xyz live.
+- Landing redesign + UX pass live on Vercel prod alias. Branch `feat/landing-redesign` not yet merged to master. Still waiting to set DNS at Porkbun to take vidsnag.xyz live. REMAINING real wiring (one-liner each when ready): DOWNLOAD_URL → .exe on GitHub Releases; DONATE_URL → Ko-fi page.
 
 ## Next steps (in order)
 1. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to Google Search Console.
