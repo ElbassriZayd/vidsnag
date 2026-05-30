@@ -52,6 +52,9 @@ def probe(url: str) -> dict:
         "title": info.get("title", url),
         "max_height": mh,
         "options": format_options(mh),
+        "thumbnail": info.get("thumbnail"),
+        "uploader": info.get("uploader") or info.get("channel"),
+        "duration_string": info.get("duration_string"),
     }
 
 

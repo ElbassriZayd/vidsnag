@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VidSnag</title>
+<style>
+  :root{
+    --bg-0:#0B0D12; --bg-1:#11141B; --surface:#171B24; --surface-2:#1F2530;
+    --border:#2A3140; --text:#EEF1F6; --muted:#9AA3B2; --faint:#6B7280;
+    --accent:#6D5EF7; --accent-2:#9B8CFF; --accent-press:#5343d8;
+    --success:#37D399; --danger:#FF6B6B; --radius:16px;
+    --shadow:0 20px 60px -15px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    color:var(--text); background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(109,94,247,.18), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(55,211,153,.10), transparent 55%),
+      var(--bg-0);
+    display:flex; align-items:center; justify-content:center;
+    padding:28px; -webkit-user-select:none; user-select:none; overflow:hidden;
+  }
+  .app{width:100%; max-width:520px}
+
+  /* header */
+  .head{display:flex; align-items:center; gap:12px; margin-bottom:18px}
+  .logo{
+    width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    box-shadow:0 8px 24px -6px rgba(109,94,247,.7);
+  }
+  .logo svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.2}
+  .brand{font-size:22px;font-weight:700;letter-spacing:-.3px}
+  .pill{
+    font-size:10px;font-weight:700;letter-spacing:.5px;color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    padding:3px 9px;border-radius:999px;
+  }
+  .tagline{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+  /* card */
+  .card{
+    background:linear-gradient(180deg,var(--surface),var(--bg-1));
+    border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:22px;
+  }
+  label.field{display:block;font-size:11px;font-weight:600;letter-spacing:.6px;
+    color:var(--muted);text-transform:uppercase;margin-bottom:7px}
+
+  .input-wrap{position:relative;display:flex;gap:10px}
+  .input-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    width:17px;height:17px;stroke:var(--faint);fill:none;stroke-width:2}
+  input[type=text]{
+    flex:1;background:var(--surface-2);border:1.5px solid var(--border);
+    border-radius:11px;color:var(--text);font-size:14px;padding:12px 12px 12px 38px;
+    outline:none;transition:border-color .18s, box-shadow .18s;
+  }
+  input[type=text]::placeholder{color:var(--faint)}
+  input[type=text]:focus{border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(109,94,247,.18)}
+
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:11px;
+    font-size:14px;font-weight:600;transition:transform .12s, background .18s, opacity .18s}
+  button:active{transform:translateY(1px)}
+  button:disabled{cursor:not-allowed;opacity:.5}
+  .btn-ghost{background:var(--surface-2);color:var(--text);
+    border:1.5px solid var(--border);padding:12px 16px;white-space:nowrap}
+  .btn-ghost:hover:not(:disabled){border-color:var(--accent);background:#222836}
+  .btn-cta{width:100%;padding:14px;color:#fff;margin-top:4px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    box-shadow:0 10px 26px -10px rgba(109,94,247,.9)}
+  .btn-cta:hover:not(:disabled){filter:brightness(1.07)}
+
+  .divider{height:1px;background:var(--border);margin:18px 0}
+
+  /* video meta */
+  .meta{display:flex;gap:13px;align-items:center;min-height:60px}
+  .thumb{width:104px;height:60px;border-radius:9px;object-fit:cover;
+    background:var(--surface-2);border:1px solid var(--border);flex-shrink:0}
+  .meta-text{min-width:0}
+  .vtitle{font-size:14px;font-weight:600;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .vsub{font-size:12px;color:var(--muted);margin-top:3px}
+  .placeholder{color:var(--faint);font-size:13px}
+
+  /* select */
+  .select-wrap{position:relative;margin-top:14px}
+  select{width:100%;appearance:none;background:var(--surface-2);
+    border:1.5px solid var(--border);border-radius:11px;color:var(--text);
+    font-size:14px;font-family:inherit;padding:12px 38px 12px 13px;outline:none;
+    cursor:pointer;transition:border-color .18s}
+  select:focus{border-color:var(--accent)}
+  select:disabled{color:var(--faint);cursor:not-allowed}
+  .select-wrap::after{content:"";position:absolute;right:15px;top:50%;
+    width:8px;height:8px;border-right:2px solid var(--muted);
+    border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);
+    pointer-events:none}
+
+  /* save-to row */
+  .saveto{display:flex;align-items:center;gap:10px;margin-top:14px;
+    background:var(--surface-2);border:1.5px solid var(--border);
+    border-radius:11px;padding:10px 12px}
+  .saveto svg{width:17px;height:17px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
+  .saveto .path{flex:1;font-size:12.5px;color:var(--muted);white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
+  .saveto button{background:transparent;color:var(--accent-2);font-size:12.5px;
+    font-weight:600;padding:4px 8px;border-radius:7px;white-space:nowrap}
+  .saveto button:hover:not(:disabled){background:rgba(109,94,247,.14)}
+
+  /* progress */
+  .progress{height:8px;background:var(--surface-2);border-radius:999px;
+    overflow:hidden;margin-top:18px}
+  .bar{height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    transition:width .25s ease}
+  .bar.indet{width:35%;animation:slide 1.1s infinite ease-in-out}
+  @keyframes slide{0%{margin-left:-35%}100%{margin-left:100%}}
+  .status{font-size:12.5px;color:var(--muted);margin-top:10px;min-height:16px}
+  .status.ok{color:var(--success)}
+  .status.err{color:var(--danger)}
+
+  .foot{text-align:center;color:var(--faint);font-size:11px;margin-top:16px}
+  .foot b{color:var(--muted);font-weight:600}
+
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="head">
+      <div class="logo">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+      </div>
+      <span class="brand">VidSnag</span>
+      <span class="pill">FREE</span>
+      <span class="tagline">runs on your computer</span>
+    </div>
+
+    <div class="card">
+      <label class="field" for="url">Video URL</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>
+        <input id="url" type="text" placeholder="Paste a YouTube or video link..." autocomplete="off" />
+        <button id="fetch" class="btn-ghost">Fetch</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="meta">
+        <img id="thumb" class="thumb" style="display:none" alt="" />
+        <div class="meta-text">
+          <div id="vtitle" class="placeholder">No video loaded yet.</div>
+          <div id="vsub" class="vsub"></div>
+        </div>
+      </div>
+
+      <div class="select-wrap">
+        <select id="quality" disabled><option>Quality</option></select>
+      </div>
+
+      <div class="saveto">
+        <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+        <span id="folder" class="path" title="">Loading folder...</span>
+        <button id="change">Change</button>
+      </div>
+
+      <button id="download" class="btn-cta" disabled>Download</button>
+
+      <div class="progress"><div id="bar" class="bar"></div></div>
+      <div id="status" class="status">Paste a URL and click Fetch.</div>
+    </div>
+
+    <div class="foot">Free forever. If it helps you, you can <b>support it</b> later.</div>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  let options = [];
+
+  function setStatus(msg, kind){ const s=$("status"); s.textContent=msg; s.className="status"+(kind?" "+kind:""); }
+  function bar(pct, indet){ const b=$("bar"); b.classList.toggle("indet",!!indet); if(!indet) b.style.width=(pct||0)+"%"; }
+
+  async function fetchQualities(){
+    const url = $("url").value.trim();
+    if(!url){ setStatus("Please paste a URL first.","err"); return; }
+    $("fetch").disabled=true; setStatus("Fetching available qualities..."); bar(0,true);
+    try{
+      const r = await window.pywebview.api.probe(url);
+      if(r.error){ throw new Error(r.error); }
+      options = r.options;
+      $("vtitle").textContent=r.title; $("vtitle").className="vtitle";
+      $("vsub").textContent=[r.uploader, r.duration_string].filter(Boolean).join("  ·  ");
+      if(r.thumbnail){ $("thumb").src=r.thumbnail; $("thumb").style.display="block"; }
+      const sel=$("quality"); sel.innerHTML="";
+      r.options.forEach((o,i)=>{ const opt=document.createElement("option"); opt.value=i; opt.textContent=o[0]; sel.appendChild(opt); });
+      sel.disabled=false; $("download").disabled=false;
+      setStatus("Max "+r.max_height+"p available. Pick a quality.");
+    }catch(e){ setStatus(""+e.message,"err"); $("vtitle").textContent="Could not read this URL.";}
+    finally{ $("fetch").disabled=false; bar(0,false); }
+  }
+
+  async function startDownload(){
+    const url=$("url").value.trim(); const idx=parseInt($("quality").value);
+    if(isNaN(idx)||!options[idx]) return;
+    const [,mode,height]=options[idx];
+    $("download").disabled=true; $("fetch").disabled=true; bar(0,false); setStatus("Starting download...");
+    try{
+      const r = await window.pywebview.api.download(url,mode,height);
+      if(r && r.error) throw new Error(r.error);
+    }catch(e){ setStatus(""+e.message,"err"); $("download").disabled=false; $("fetch").disabled=false; }
+  }
+
+  // called from Python (engine progress hook)
+  window.onProgress = d => {
+    if(d.status==="downloading"){ bar(d.percent); setStatus("Downloading  "+(d.percent||0).toFixed(0)+"%   "+(d.speed||"")); }
+    else if(d.status==="processing"){ bar(100); setStatus("Processing (merging / converting)..."); }
+  };
+  window.onDone = path => { bar(100); setStatus("Done. Saved to "+path,"ok"); $("download").disabled=false; $("fetch").disabled=false; };
+  window.onError = msg => { setStatus(""+msg,"err"); $("download").disabled=false; $("fetch").disabled=false; };
+
+  function showFolder(p){ const el=$("folder"); el.textContent=p; el.title=p; }
+
+  async function loadFolder(){
+    try{ showFolder(await window.pywebview.api.get_folder()); }catch(e){}
+  }
+  async function changeFolder(){
+    try{ showFolder(await window.pywebview.api.choose_folder()); }catch(e){}
+  }
+
+  $("fetch").addEventListener("click",fetchQualities);
+  $("download").addEventListener("click",startDownload);
+  $("change").addEventListener("click",changeFolder);
+  $("url").addEventListener("keydown",e=>{ if(e.key==="Enter") fetchQualities(); });
+  window.addEventListener("pywebviewready",()=>{ setStatus("Paste a URL and click Fetch."); loadFolder(); });
+</script>
+</body>
+</html>
