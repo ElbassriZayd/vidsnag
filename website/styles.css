@@ -9,7 +9,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:"Nunito",system-ui,sans-serif;color:var(--ink);line-height:1.55;overflow-x:hidden;
+html{overflow-x:hidden}
+body{font-family:"Nunito",system-ui,sans-serif;color:var(--ink);line-height:1.55;overflow-x:hidden;max-width:100vw;
   background:
     radial-gradient(720px 400px at 12% -8%, rgba(124,92,252,.14), transparent 60%),
     radial-gradient(560px 320px at 108% 4%, rgba(55,211,153,.13), transparent 55%),
@@ -86,11 +87,11 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
 
 /* supporters ticker */
 .ticker-wrap{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:8px auto 0;
-  padding:14px clamp(18px,5vw,40px)}
+  padding:14px clamp(18px,5vw,40px);min-width:0;overflow:hidden}
 .ticker-label{display:inline-flex;align-items:center;gap:7px;font-family:"Baloo 2";font-weight:700;
   font-size:13px;color:var(--muted);white-space:nowrap;flex-shrink:0}
 .ticker-label .hh{width:15px;height:15px;fill:var(--rose);stroke:none}
-.ticker{position:relative;overflow:hidden;flex:1;
+.ticker{position:relative;overflow:hidden;flex:1 1 0;min-width:0;max-width:100%;
   -webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
   mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .ticker-track{display:flex;gap:10px;width:max-content;animation:tick 38s linear infinite}
@@ -256,7 +257,10 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
   .pain-grid,.steps,.feat-grid,.tiers{grid-template-columns:1fr}
   .nav-links{display:none}
   .nav-toggle{display:flex}
-  .hero h1{font-size:clamp(28px,8vw,40px);overflow-wrap:break-word;hyphens:auto}
+  .hero h1{font-size:25px;line-height:1.15;overflow-wrap:break-word}
+  .hero h1 br{display:none}
+  .hero{padding:36px 18px 48px}
+  .sub{font-size:15px}
   .cta-pair{flex-direction:column;width:100%;max-width:340px}
   .cta-pair .btn-cta,.cta-pair .btn-soft{justify-content:center;width:100%}
   .ticker-wrap{flex-direction:column;align-items:stretch;gap:10px}
