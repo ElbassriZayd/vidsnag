@@ -5,7 +5,7 @@ Last updated: 2026-05-29
 ---
 
 ## Current milestone
-Phase 1 — desktop app MVP (engine + Tkinter GUI). Engine working; next is .exe packaging.
+Phase 2 — website (landing page + supporters wall). Phase 1 desktop app DONE.
 
 ## Completed
 - 2026-05-29 Product decided: VidSnag, free desktop video downloader, donation-funded
@@ -15,15 +15,16 @@ Phase 1 — desktop app MVP (engine + Tkinter GUI). Engine working; next is .exe
 - 2026-05-29 Engine confirmed: telecharger.py (yt-dlp, quality tiers 4K→480p + MP3)
 - 2026-05-29 Scaffold files created (.gitignore, README, PROJECT_STATE, ROADMAP, SKILLS, ERRORS)
 - 2026-05-29 Phase 1 built: app/engine.py + app/gui.py (Tkinter). Engine VERIFIED (probe + MP3 download work end-to-end). git initialised + first commit.
+- 2026-05-30 Phase 1 UPGRADED: switched UI to premium WebView2 (pywebview) HTML/CSS shell (app/web/index.html + app/desktop.py). Native folder picker, thumbnail/title/channel/duration preview, animated progress. Real download VERIFIED by user. Commit 9211692.
 
 ## In progress
-- Phase 1 desktop app: engine + GUI built; engine verified (probe + MP3 OK). GUI not yet smoke-tested with a display. PyInstaller .exe packaging deferred (needs more disk).
+- Phase 2 website: starting the landing page (reuses app/web/index.html design language).
 
 ## Next steps (in order)
-1. Smoke-test the GUI window: `./env_video/Scripts/python.exe -m app.gui`
-2. Free real disk space (C: still 238G/239G full) so PyInstaller can build the .exe
-3. Package to a single .exe (PyInstaller, bundle yt-dlp + ffmpeg)
-4. Phase 2: landing page on Vercel + point vidsnag.xyz
+1. Build website/ landing page (hero + download CTA + how-it-works + supporters wall slot)
+2. Deploy to Vercel, point vidsnag.xyz, submit to Google Search Console
+3. Package the desktop app to a single .exe (PyInstaller, bundle yt-dlp + ffmpeg) — needs more disk
+4. Donations (Payoneer + Ko-fi + crypto) and supporters wall backend (Supabase + webhook)
 
 ## Blocked / waiting
 - C: drive 100% full (<50 MB free) → file writes corrupt to 0 bytes. Must free space.

@@ -101,7 +101,11 @@ def main():
         background_color="#0B0D12",
     )
     api.set_window(window)
-    webview.start()
+    icon = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
+    try:
+        webview.start(icon=icon)
+    except TypeError:
+        webview.start()
 
 
 if __name__ == "__main__":

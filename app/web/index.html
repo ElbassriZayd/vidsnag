@@ -27,12 +27,8 @@
 
   /* header */
   .head{display:flex; align-items:center; gap:12px; margin-bottom:18px}
-  .logo{
-    width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    box-shadow:0 8px 24px -6px rgba(109,94,247,.7);
-  }
-  .logo svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.2}
+  .logo{width:42px;height:42px;object-fit:contain;
+    filter:drop-shadow(0 6px 16px rgba(109,94,247,.45));}
   .brand{font-size:22px;font-weight:700;letter-spacing:-.3px}
   .pill{
     font-size:10px;font-weight:700;letter-spacing:.5px;color:#fff;
@@ -131,9 +127,7 @@
 <body>
   <div class="app">
     <div class="head">
-      <div class="logo">
-        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-      </div>
+      <img class="logo" src="assets/logo-128.png" alt="VidSnag" />
       <span class="brand">VidSnag</span>
       <span class="pill">FREE</span>
       <span class="tagline">runs on your computer</span>
