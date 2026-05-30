@@ -6,40 +6,67 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 from app import engine
+from app import theme
 
 
 class VidSnagApp:
     def __init__(self, root):
         self.root = root
         root.title("VidSnag")
-        root.geometry("560x300")
+        root.geometry("620x440")
+        root.minsize(520, 420)
+
+        self.f = theme.apply(root)
         self.events = queue.Queue()
         self.options = []
 
-        frm = ttk.Frame(root, padding=16)
-        frm.pack(fill="both", expand=True)
+        # ---- Header ----
+        header = ttk.Frame(root, style="App.TFrame", padding=(28, 22, 28, 12))
+        header.pack(fill="x")
+        row = ttk.Frame(header, style="App.TFrame")
+        row.pack(fill="x")
+        ttk.Label(row, text="VidSnag", style="Wordmark.TLabel").pack(side="left")
+        ttk.Label(row, text="FREE", style="Tag.TLabel").pack(side="left", padx=(10, 0), pady=(6, 0))
+        ttk.Label(
+            header,
+            text="Paste a link, choose a quality, download. It runs on your computer.",
+            style="Status.TLabel",
+        ).pack(anchor="w", pady=(6, 0))
 
-        ttk.Label(frm, text="Video URL:").pack(anchor="w")
+        # ---- Card ----
+        card = ttk.Frame(root, style="Card.TFrame", padding=24)
+        card.pack(fill="both", expand=True, padx=28, pady=(8, 24))
+        card.columnconfigure(0, weight=1)
+
+        ttk.Label(card, text="VIDEO URL", style="FieldLabel.TLabel").grid(row=0, column=0, sticky="w")
         self.url_var = tk.StringVar()
-        ttk.Entry(frm, textvariable=self.url_var, width=64).pack(fill="x", pady=(0, 8))
+        self.url_entry = ttk.Entry(card, textvariable=self.url_var, style="App.TEntry", font=self.f["body"])
+        self.url_entry.grid(row=1, column=0, sticky="ew", pady=(6, 12))
+        self.url_entry.bind("<Return>", lambda e: self.on_fetch())
 
-        self.fetch_btn = ttk.Button(frm, text="Fetch qualities", command=self.on_fetch)
-        self.fetch_btn.pack(anchor="w")
+        self.fetch_btn = ttk.Button(card, text="Fetch qualities", style="Ghost.TButton", command=self.on_fetch, cursor="hand2")
+        self.fetch_btn.grid(row=2, column=0, sticky="w")
 
-        self.title_lbl = ttk.Label(frm, text="", wraplength=520, foreground="#444")
-        self.title_lbl.pack(anchor="w", pady=(8, 0))
+        # divider
+        ttk.Frame(card, style="App.TFrame", height=1).grid(row=3, column=0, sticky="ew", pady=18)
 
-        self.quality = ttk.Combobox(frm, state="disabled", width=40)
-        self.quality.pack(anchor="w", pady=8)
+        self.title_lbl = ttk.Label(card, text="No video loaded yet.", style="Title.TLabel", wraplength=520)
+        self.title_lbl.grid(row=4, column=0, sticky="w")
 
-        self.dl_btn = ttk.Button(frm, text="Download", command=self.on_download, state="disabled")
-        self.dl_btn.pack(anchor="w")
+        ttk.Label(card, text="QUALITY", style="FieldLabel.TLabel").grid(row=5, column=0, sticky="w", pady=(14, 0))
+        self.quality = ttk.Combobox(card, state="disabled", style="App.TCombobox", font=self.f["body"])
+        self.quality.grid(row=6, column=0, sticky="ew", pady=(6, 16))
 
-        self.progress = ttk.Progressbar(frm, mode="determinate", maximum=100)
-        self.progress.pack(fill="x", pady=(12, 4))
-        self.status = ttk.Label(frm, text="Paste a URL and fetch qualities.")
-        self.status.pack(anchor="w")
+        self.dl_btn = ttk.Button(card, text="Download", style="CTA.TButton", command=self.on_download, state="disabled", cursor="hand2")
+        self.dl_btn.grid(row=7, column=0, sticky="w")
 
+        # ---- Progress / status ----
+        self.progress = ttk.Progressbar(card, mode="determinate", maximum=100, style="App.Horizontal.TProgressbar")
+        self.progress.grid(row=8, column=0, sticky="ew", pady=(20, 8))
+        self.status = ttk.Label(card, text="Paste a URL and fetch qualities.", style="Status.TLabel")
+        self.status.grid(row=9, column=0, sticky="w")
+
+        self.url_entry.focus_set()
         self.root.after(100, self._drain_events)
 
     # --- background workers ---
@@ -101,7 +128,7 @@ class VidSnagApp:
             self.quality.current(0)
             self.dl_btn["state"] = "normal"
             self.fetch_btn["state"] = "normal"
-            self.status["text"] = f"Max resolution: {payload['max_height']}p. Pick a format."
+            self.status["text"] = f"Max resolution: {payload['max_height']}p. Pick a format and download."
         elif kind == "progress":
             d = payload
             if d.get("status") == "downloading":
@@ -109,7 +136,9 @@ class VidSnagApp:
                 done = d.get("downloaded_bytes") or 0
                 if total:
                     self.progress["value"] = done * 100 / total
-                self.status["text"] = f"Downloading... {d.get('_percent_str', '').strip()}"
+                pct = d.get("_percent_str", "").strip()
+                spd = d.get("_speed_str", "").strip()
+                self.status["text"] = f"Downloading  {pct}   {spd}"
             elif d.get("status") == "finished":
                 self.status["text"] = "Processing (merging / converting)..."
         elif kind == "done":
