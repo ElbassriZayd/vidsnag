@@ -34,3 +34,8 @@ website/.vercel/
 Thumbs.db
 .vscode/
 .idea/
+
+# scratch / screenshots
+app/web/_demo*.html
+app/web/_s_*.png
+website/_shot_*.png
