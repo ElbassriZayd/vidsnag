@@ -39,6 +39,17 @@ App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all 
 - TODO later: slim local build to essentials ffmpeg too; tag a release to exercise the CI build; add VirusTotal badge once user sends link.
 
 ## Next steps (in order)
+0. ⭐ TOP PRIORITY NEXT SESSION (user 2026-05-30: "fix the problem"): KILL the SmartScreen
+   "VidSnag.exe isn't commonly downloaded" banner. Reminder: it's reputation not virus, and
+   ONLY signing/Store removes it — this is a pick-a-route task, not a code task. Routes ranked:
+   (a) Azure Trusted Signing ~$10/mo — real signing, no Store review; needs identity verif
+       (check Morocco/individual eligibility). I wire signtool into the CI build.
+   (b) EV cert ~$250-400/yr + hardware token — INSTANT trust, surest.
+   (c) Microsoft Store $19 once — Microsoft signs it (banner gone) + trust badge; ⚠ Store may
+       reject a yt-dlp downloader. I package MSIX.
+   (d) SignPath FREE OSS signing — apply now; OV (not instant) + Foundation wants traction.
+   USER must choose + provide payment/identity/login; THEN I implement signing in one pass.
+   Decide budget before next session. (EV is the only same-day "everyone trusts it" option.)
 1. DONATE wiring (USER): paste Binance USDT address(+network) and/or PayPal.me handle → set DONATE_URL in website/main.js (one-liner; crypto = copy+QR card). Tabs already opened in browser.
 2. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to GSC.
 3. MERGE branch `feat/landing-redesign` -> master (deployed but unmerged).
