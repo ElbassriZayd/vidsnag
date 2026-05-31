@@ -9,12 +9,16 @@ DEFAULT_OUTPUT_DIR = "videos"
 def _ffmpeg_location():
     """Where bundled ffmpeg/ffprobe live in the packaged app, else None.
 
-    PyInstaller extracts the bundled binaries next to the app in sys._MEIPASS.
-    Returning None lets yt-dlp fall back to ffmpeg on PATH (source/dev runs).
+    Nuitka ships them next to this module (app/ffmpeg.exe); PyInstaller extracts
+    them into sys._MEIPASS. None lets yt-dlp fall back to ffmpeg on PATH (dev).
     """
-    base = getattr(sys, "_MEIPASS", None)
-    if base and os.path.exists(os.path.join(base, "ffmpeg.exe")):
-        return base
+    candidates = [
+        os.path.dirname(os.path.abspath(__file__)),   # Nuitka: app/ffmpeg.exe
+        getattr(sys, "_MEIPASS", "") or "",            # PyInstaller onefile
+    ]
+    for base in candidates:
+        if base and os.path.exists(os.path.join(base, "ffmpeg.exe")):
+            return base
     return None
 
 
