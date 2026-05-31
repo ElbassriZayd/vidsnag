@@ -1,11 +1,9 @@
 // VidSnag landing — client logic: buttons, modal, supporters wall, donation picker.
 
-// When the real destinations exist, set these and the buttons become real links
-// automatically (no other change needed):
-//   DOWNLOAD_URL = "https://github.com/<you>/vidsnag/releases/latest";
-//   DONATE_URL   = "https://ko-fi.com/<you>";   // amount is appended as ?amount=N
 const DOWNLOAD_URL = "https://github.com/ElbassriZayd/vidsnag/releases/latest/download/VidSnag.exe";
-const DONATE_URL = null;   // null → show the "opens soon" modal (set to a Ko-fi/PayPal/crypto link to enable)
+// Crypto donations: USDT on BNB Smart Chain (BEP20). If this ever changes, update
+// it here AND the <code id="usdtAddr"> text AND regenerate assets/usdt-bep20-qr.png.
+const USDT_BEP20 = "0xd62212b2CE5f5AEf16A5b79B5e00Fa02AA68fB33";
 
 // Founding supporters (no dollar amounts — hearts only). Real Ko-fi donors will
 // later be appended by the backend WITH amounts and mix in among these.
@@ -21,11 +19,6 @@ function escapeHtml(s) {
 }
 
 const HEART = '<svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z"/></svg>';
-
-const MODAL_ICONS = {
-  download: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 17v2a2 2 0 002 2h10a2 2 0 002-2v-2"/></svg>',
-  donate: '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z" fill="#fff" stroke="none"/></svg>',
-};
 
 let donateAmount = null; // chosen tier / custom amount (string) or null
 
@@ -46,51 +39,49 @@ function renderTicker() {
   track.innerHTML = chips + chips; // duplicate for a seamless loop
 }
 
-// ---- coming-soon modal ----
+// ---- USDT (BEP20) donate card ----
 let lastFocused = null;
-function openModal(kind) {
-  const m = document.getElementById("soonModal");
+function openDonate(amount) {
+  const m = document.getElementById("donateModal");
   if (!m || typeof m.showModal !== "function") return;
-  const ico = document.getElementById("soonIco");
-  const title = document.getElementById("soonTitle");
-  const body = document.getElementById("soonBody");
-  if (kind === "download") {
-    ico.innerHTML = MODAL_ICONS.download;
-    title.textContent = "Almost ready!";
-    body.textContent = "The Windows build drops very soon. Bookmark this page and you can grab it the moment it lands.";
-  } else {
-    ico.innerHTML = MODAL_ICONS.donate;
-    title.textContent = "Donations open soon";
-    body.textContent = donateAmount
-      ? `Thank you for wanting to chip in $${donateAmount}! Tipping goes live in a few days, and your name joins the wall then.`
-      : "Thank you! Tipping goes live in a few days, and your name joins the supporters wall then.";
-  }
+  const sub = document.getElementById("donateSub");
+  if (sub) sub.innerHTML = amount
+    ? `Thank you! Send <b>~$${escapeHtml(String(amount))} of USDT</b> (or any amount) to this address to keep VidSnag free:`
+    : `Send any amount of <b>USDT</b> to this address to keep VidSnag free:`;
   lastFocused = document.activeElement;
   m.showModal();
 }
-function closeModal() {
-  const m = document.getElementById("soonModal");
+function closeDonate() {
+  const m = document.getElementById("donateModal");
   if (m && m.open) m.close();
 }
-function wireModal() {
-  const m = document.getElementById("soonModal");
+function wireDonateModal() {
+  const m = document.getElementById("donateModal");
   if (!m) return;
-  document.getElementById("soonClose").addEventListener("click", closeModal);
-  document.getElementById("soonOk").addEventListener("click", closeModal);
-  // click on the backdrop (outside the card) closes
-  m.addEventListener("click", e => { if (e.target === m) closeModal(); });
-  // restore focus to the trigger when the dialog closes (keyboard hygiene)
+  document.getElementById("donateClose").addEventListener("click", closeDonate);
+  m.addEventListener("click", e => { if (e.target === m) closeDonate(); });
   m.addEventListener("close", () => { if (lastFocused && lastFocused.focus) lastFocused.focus(); });
+  // copy the address to clipboard
+  const copyBtn = document.getElementById("copyAddr");
+  if (copyBtn) copyBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(USDT_BEP20);
+      copyBtn.textContent = "Copied!";
+      copyBtn.classList.add("ok");
+      setTimeout(() => { copyBtn.textContent = "Copy"; copyBtn.classList.remove("ok"); }, 1800);
+    } catch (e) {
+      // fallback: select the text so the user can copy manually
+      const r = document.createRange();
+      r.selectNodeContents(document.getElementById("usdtAddr"));
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    }
+  });
 }
 
 // ---- buttons: real link if a URL exists, else the modal ----
 function wireButtons() {
   const dls = document.querySelectorAll("#dl-win, #dl-win2");
-  dls.forEach(a => {
-    if (DOWNLOAD_URL) { a.setAttribute("href", DOWNLOAD_URL); return; }
-    a.setAttribute("href", "#download");
-    a.addEventListener("click", e => { e.preventDefault(); openModal("download"); });
-  });
+  dls.forEach(a => { if (DOWNLOAD_URL) a.setAttribute("href", DOWNLOAD_URL); });
   // sticky button → reveal the inline give widget (no modal, no navigation)
   const fab = document.getElementById("supportFab");
   if (fab) fab.addEventListener("click", () => {
@@ -132,13 +123,9 @@ function wireDonation() {
       setLabel();
     });
     if (go) go.addEventListener("click", e => {
-      if (DONATE_URL) {
-        window.location.href = DONATE_URL + (scope._amt ? `?amount=${encodeURIComponent(scope._amt)}` : "");
-        return;
-      }
       e.preventDefault();
       donateAmount = scope._amt;
-      openModal("donate");
+      openDonate(scope._amt);
     });
   });
 }
@@ -174,7 +161,7 @@ function wireMobileMenu() {
 document.addEventListener("DOMContentLoaded", () => {
   renderWall();
   renderTicker();
-  wireModal();
+  wireDonateModal();
   wireButtons();
   wireDonation();
   wireNav();

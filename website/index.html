@@ -286,16 +286,22 @@
     <span>Keep it free</span>
   </button>
 
-  <!-- coming-soon dialog (content swapped per trigger by main.js) -->
-  <dialog class="modal" id="soonModal" aria-labelledby="soonTitle">
+  <!-- USDT (BEP20) donate card -->
+  <dialog class="modal" id="donateModal" aria-labelledby="donateTitle">
     <div class="modal-card">
-      <button class="modal-x" id="soonClose" type="button" aria-label="Close">
+      <button class="modal-x" id="donateClose" type="button" aria-label="Close">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
-      <span class="modal-ico" id="soonIco" aria-hidden="true"></span>
-      <h3 id="soonTitle">Almost ready!</h3>
-      <p id="soonBody">The Windows build drops very soon.</p>
-      <button class="btn-cta modal-ok" id="soonOk" type="button">Got it</button>
+      <span class="modal-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-9.2-9C1.4 8 3 4.8 6.2 4.8c1.9 0 3.1 1.1 3.8 2.2.7-1.1 1.9-2.2 3.8-2.2 3.2 0 4.8 3.2 3.4 6.2C19 15.4 12 20 12 20z" fill="#fff" stroke="none"/></svg></span>
+      <h3 id="donateTitle">Thank you!</h3>
+      <p class="dm-sub" id="donateSub">Send any amount of <b>USDT</b> to this address to keep VidSnag free:</p>
+      <img class="dm-qr" src="assets/usdt-bep20-qr.png" width="170" height="170" alt="QR code of the USDT BEP20 donation address" />
+      <div class="dm-addr">
+        <code id="usdtAddr">0xd62212b2CE5f5AEf16A5b79B5e00Fa02AA68fB33</code>
+        <button class="dm-copy" id="copyAddr" type="button">Copy</button>
+      </div>
+      <p class="dm-warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 16.5v.5"/></svg>
+        Send <b>USDT on BNB Smart Chain (BEP20)</b> only. Other networks are lost forever.</p>
     </div>
   </dialog>
 
