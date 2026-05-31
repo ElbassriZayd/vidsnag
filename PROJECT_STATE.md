@@ -4,8 +4,29 @@ Last updated: 2026-05-30
 
 ---
 
+## Security audit + hardening (2026-05-30)
+- DEEP AUDIT of everything shipped in the exe: NO backdoor / exfiltration / telemetry / eval/exec /
+  subprocess / sockets / persistence / obfuscation. App = thin yt-dlp wrapper. Only network =
+  yt-dlp downloads (intended) + video thumbnail preview + (was) Google Fonts.
+- HARDENED: bundled UI fonts locally (app/web/fonts.css + assets/fonts/*.woff2 latin subset) →
+  app now makes ZERO external requests for its own UI. Removed Google Fonts CDN call.
+- pip-audit: runtime deps clean; upgraded setuptools (build-only) → "No known vulnerabilities".
+- Published SECURITY.md on public repo (network disclosure, audit, verify guide, AV-FP explainer).
+- Rebuilt hardened exe (184.7MB), re-released v0.1.0. NEW SHA-256
+  83327bb418a2633bd017cd291dcf9e5056f7591b9d4b2a90e5289b2d06460080. VirusTotal re-scan = 1/69
+  (Bkav FP only; Microsoft Defender + all majors clean). Site VT link updated to new hash.
+- TESTED win32-removal hypothesis earlier: DISPROVEN (stripped build 3/71 incl Microsoft; shipped 1/69).
+- VT remediation remaining: submit Bkav false-positive report (drafted); code-signing = full fix.
+
+## DOMAIN LIVE (2026-05-31)
+- vidsnag.xyz is LIVE with HTTPS. Porkbun DNS: deleted parking (ALIAS@→pixie, CNAME*→pixie),
+  added A @→76.76.21.21 + CNAME www→cname.vercel-dns.com (kept Porkbun nameservers). DNS
+  propagated fast; Vercel cert provisioned after a `vercel --prod` redeploy nudge (it had
+  stalled despite HTTP 200). http→https 308 redirect works. www.vidsnag.xyz added to Vercel
+  project (cert provisioning). The 86MB build is the live download; site fully live on the real domain.
+
 ## Current milestone
-Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vidsnag.xyz live.
+App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all live on Vercel prod alias. Free trust signals shipped (open-source + VirusTotal + checksum). Remaining: donate wiring (needs user link), DNS, merge branch, free code-signing.
 
 ## Completed
 - 2026-05-29 Product decided: VidSnag, free desktop video downloader, donation-funded
@@ -22,14 +43,39 @@ Phase 2 — website BUILT + polished (conversion landing). Next: DNS to take vid
 - 2026-05-30 Pre-launch fixes: mobile hamburger menu, mobile headline 25px, marquee+ticker overflow contained (verified clientWidth==scrollWidth, no horizontal overflow).
 - 2026-05-30 Deploy decision: VERCEL (not the CaféOS/mail VPS — contamination risk to email reputation). Static landing on Vercel free CDN; .exe will go on GitHub Releases. Vercel project "vidsnag" exists; prod alias https://vidsnag-ten.vercel.app is LIVE (200). vidsnag.xyz added to project but NOT pointed yet.
 
+- 2026-05-30 Landing REDESIGN (product-led pass): hand-built page read "generic template" (empty hero, app screenshot buried, single cream rhythm all the way down, no contrast). Fixed via the manzili METHOD (decode category references, not manzili's look): decoded Screen Studio (product-window-on-glow-stage hero) + cobalt.tools (paste-box-as-hero). Rebuilt hero = big app window on warm purple→mint→peach gradient-glow stage + fake "paste a link" teaser pill (4K·1080p·MP3 chips + Get) + ONE primary CTA (demoted "Chip in" to ghost link) + bigger headline (mobile 25→33px, fixed br-collision). Turned donation block into the page's one DARK contrast band. Retired the now-duplicate "See it in action" demo section (hero does that job). Verified local: no horizontal overflow desktop+mobile, screenshots reviewed. NOT yet deployed (live Vercel still old build).
+
+- 2026-05-30 Landing redesign SHIPPED: committed on branch `feat/landing-redesign` + `vercel --prod`. LIVE + verified on https://vidsnag-ten.vercel.app (new-build marker confirmed). vidsnag.xyz still HTTP 000 (DNS not pointed — unchanged user-side step).
+
+- 2026-05-30 UX/UI pass (ui-ux-pro-max): all 3 dead "#" buttons now functional via an accessible native `<dialog>` "coming-soon" modal (Download → "Almost ready!", Donate → amount-aware "opens soon"). FUTURE-PROOFED: set DOWNLOAD_URL / DONATE_URL consts in main.js and buttons auto-become real links (Ko-fi gets ?amount=N). a11y: focus-visible rings everywhere, body text contrast darkened to WCAG AA (--muted #8A8398→#645D77, --faint→#736C86), nav-toggle 44px touch target, tiers aria-pressed, decorative stars aria-hidden, Esc closes modal+menu, focus restored to trigger on close. Verified via Playwright: modal open/close/Esc, amount-aware copy, zero console errors, no overflow desktop+mobile.
+
+- 2026-05-30 DOWNLOAD now REAL: packaged the desktop app to a single Windows .exe. PyInstaller 6.20 onefile (vidsnag.spec + vidsnag_main.py entry), bundles ffmpeg.exe+ffprobe.exe (Gyan 8.1, ~446MB src) + yt_dlp; final VidSnag.exe = 189MB. engine.py picks bundled ffmpeg via sys._MEIPASS; desktop.py resolves web/ + icon frozen-aware. Smoke-tested: exe launches, WebView2 window opens, no crash. Published PUBLIC repo github.com/ElbassriZayd/vidsnag (README + binary ONLY, no source/business docs) + release v0.1.0. Stable URL https://github.com/ElbassriZayd/vidsnag/releases/latest/download/VidSnag.exe returns 200. main.js DOWNLOAD_URL set → both Download buttons now real downloads. Hero copy "tiny download"→"Windows 10 & 11" (189MB isn't tiny). Disk survived: 3.0→2.6GB.
+
 ## In progress
-- Website done; waiting to set DNS at Porkbun to take vidsnag.xyz live.
+- DOWNLOAD live. DONATE still pending USER input: user has Binance + PayPal; advised lead with Binance USDT (privacy + Morocco payout), PayPal only as Business acct (name exposure + downloader-freeze risk). Need the actual USDT address(+network)/PayPal.me handle to set DONATE_URL (one-liner). Branch `feat/landing-redesign` not merged. DNS at Porkbun still pending to take vidsnag.xyz live.
+- 2026-05-30 TRUST pass (user hit SmartScreen "not commonly downloaded" — it's REPUTATION not virus; only signing removes it). User chose FREE path. Done: (1) embedded version/publisher metadata in exe (reduces AV false-positives), rebuilt+re-released, new SHA-256 f98a4735... (2) OPEN-SOURCED the app MIT to public github.com/ElbassriZayd/vidsnag (engine+desktop+web only, NO business docs) + reproducible GitHub Actions Windows build (slim essentials ffmpeg, commented SignPath signing step ready). (3) Site FAQ+footer link to source + checksum-verify messaging. (4) FAQ entry explaining the SmartScreen banner.
+- 2026-05-30 VirusTotal: uploaded VidSnag.exe via Playwright (headed msedge, anon upload). Result 1/69 — only Bkav Pro (notorious PyInstaller false-positive engine); Microsoft Defender + all majors UNDETECTED. Badged on site FAQ. Stable report: virustotal.com/gui/file/f98a4735f055c7675ae72e691734f18feac943dd10b00bb84cd1722bc21575fb
+- NOTE: Microsoft wdsi/filesubmission is NOT useful here (Defender already passes; that portal only helps when Defender itself flags). SmartScreen reputation is built by signing + download volume, not file submission. Real free lever = SignPath OSS signing (caveat: Foundation usually wants an established/popular project, a day-old repo may be deferred until traction).
+- FREE signing path = SignPath Foundation (needs OSS — now eligible). USER ACTIONS pending: apply to SignPath (signpath.org), submit exe as safe to microsoft.com/wdsi/filesubmission, upload to virustotal.com + send link for a "verified clean" site badge. SignPath gives OV (not instant SmartScreen clear; reputation builds faster). EV (~$300/yr) is the only instant-trust option, declined for now.
+- TODO later: slim local build to essentials ffmpeg too; tag a release to exercise the CI build; add VirusTotal badge once user sends link.
 
 ## Next steps (in order)
-1. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to Google Search Console.
-2. Wire real links: Download btn -> .exe (GitHub Releases), donate/tiers -> Ko-fi (needs Payoneer first).
-3. Package desktop app to single .exe (PyInstaller, bundle yt-dlp + ffmpeg) — disk tight (~3.4 GB free).
-4. Donations (Payoneer US-bank route + Ko-fi + crypto) + supporters-wall backend (Supabase + Ko-fi webhook) so real donors append with $ amounts.
+0. ⭐ TOP PRIORITY NEXT SESSION (user 2026-05-30: "fix the problem"): KILL the SmartScreen
+   "VidSnag.exe isn't commonly downloaded" banner. Reminder: it's reputation not virus, and
+   ONLY signing/Store removes it — this is a pick-a-route task, not a code task. Routes ranked:
+   (a) Azure Trusted Signing ~$10/mo — real signing, no Store review; needs identity verif
+       (check Morocco/individual eligibility). I wire signtool into the CI build.
+   (b) EV cert ~$250-400/yr + hardware token — INSTANT trust, surest.
+   (c) Microsoft Store $19 once — Microsoft signs it (banner gone) + trust badge; ⚠ Store may
+       reject a yt-dlp downloader. I package MSIX.
+   (d) SignPath FREE OSS signing — apply now; OV (not instant) + Foundation wants traction.
+   USER must choose + provide payment/identity/login; THEN I implement signing in one pass.
+   Decide budget before next session. (EV is the only same-day "everyone trusts it" option.)
+1. DONATE wiring (USER): paste Binance USDT address(+network) and/or PayPal.me handle → set DONATE_URL in website/main.js (one-liner; crypto = copy+QR card). Tabs already opened in browser.
+2. DNS at Porkbun: A record @ -> 76.76.21.21 (+ optional CNAME www -> cname.vercel-dns.com). Keep Porkbun as DNS host, do NOT switch nameservers. Then verify HTTPS + submit to GSC.
+3. MERGE branch `feat/landing-redesign` -> master (deployed but unmerged).
+4. SignPath Foundation OSS signing application (USER login) when repo has some traction; then uncomment the signing step in .github/workflows/build.yml.
+5. Supporters-wall backend (Supabase + Ko-fi/crypto webhook) so real donors append with amounts.
 
 ## Blocked / waiting
 - DNS step is user-side (no Porkbun API creds saved; needs dashboard login).

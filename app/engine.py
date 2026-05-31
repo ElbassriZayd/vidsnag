@@ -1,8 +1,28 @@
 """VidSnag download engine. Pure, UI-agnostic wrappers around yt-dlp."""
 import os
+import sys
 import yt_dlp
 
 DEFAULT_OUTPUT_DIR = "videos"
+
+
+def _ffmpeg_location():
+    """Where bundled ffmpeg/ffprobe live in the packaged app, else None.
+
+    Nuitka ships them next to this module (app/ffmpeg.exe); PyInstaller extracts
+    them into sys._MEIPASS. None lets yt-dlp fall back to ffmpeg on PATH (dev).
+    """
+    candidates = [
+        os.path.dirname(os.path.abspath(__file__)),   # Nuitka: app/ffmpeg.exe
+        getattr(sys, "_MEIPASS", "") or "",            # PyInstaller onefile
+    ]
+    for base in candidates:
+        if base and os.path.exists(os.path.join(base, "ffmpeg.exe")):
+            return base
+    return None
+
+
+FFMPEG_LOCATION = _ffmpeg_location()
 
 # Resolution tiers offered, highest to lowest.
 VIDEO_TIERS = [
@@ -65,6 +85,8 @@ def _ydl_opts(mode, height, output_dir, progress_hook):
         "quiet": True,
         "no_warnings": True,
     }
+    if FFMPEG_LOCATION:
+        base["ffmpeg_location"] = FFMPEG_LOCATION
     if mode == "mp3":
         return {
             **base,

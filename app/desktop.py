@@ -5,14 +5,29 @@ user's machine. Progress is pushed back to JS via window.evaluate_js.
 Run: python -m app.desktop
 """
 import os
+import sys
 import threading
 
 import webview
 
 from app import engine
 
-HTML_PATH = os.path.join(os.path.dirname(__file__), "web", "index.html")
-ICON_PATH = os.path.join(os.path.dirname(__file__), "web", "assets", "vidsnag.ico")
+
+def _res(*parts):
+    """Resolve a bundled resource from source, PyInstaller, or Nuitka.
+
+    PyInstaller (onefile) ships web/ at app/web under sys._MEIPASS. Nuitka and
+    source runs resolve relative to this module (Nuitka rewrites __file__ to the
+    unpacked location).
+    """
+    base = getattr(sys, "_MEIPASS", None)
+    if base:
+        return os.path.join(base, "app", *parts)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), *parts)
+
+
+HTML_PATH = _res("web", "index.html")
+ICON_PATH = _res("web", "assets", "vidsnag.ico")
 
 
 def _default_download_dir():
