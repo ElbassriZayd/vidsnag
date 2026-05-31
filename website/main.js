@@ -5,6 +5,11 @@ const DOWNLOAD_URL = "https://github.com/ElbassriZayd/vidsnag/releases/latest/do
 // it here AND the <code id="usdtAddr"> text AND regenerate assets/usdt-bep20-qr.png.
 const USDT_BEP20 = "0xd62212b2CE5f5AEf16A5b79B5e00Fa02AA68fB33";
 
+// Supabase (community message wall). The anon key is public by design; RLS guards the data.
+const SUPA_URL = "https://qkdodbsjwnebyglqjgqr.supabase.co";
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrZG9kYnNqd25lYnlnbHFqZ3FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDA4NTUsImV4cCI6MjA5NTgxNjg1NX0.nKCcYCNPatJM-P1gwqal6IzHJp0JnD9OD_QiK1Pc6IA";
+const SUPA_HEAD = { apikey: SUPA_ANON, Authorization: "Bearer " + SUPA_ANON };
+
 // Founding supporters (no dollar amounts — hearts only). Real Ko-fi donors will
 // later be appended by the backend WITH amounts and mix in among these.
 const FOUNDING = [
@@ -158,6 +163,78 @@ function wireMobileMenu() {
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 }
 
+// ---- community message wall (Supabase) ----
+const WALL_USER = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>';
+const WALL_CROWN = '<svg viewBox="0 0 24 24"><path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/><path d="M5 20h14"/></svg>';
+
+function renderMsg(m) {
+  const sup = !!m.is_supporter;
+  return `<div class="msg${sup ? " sup" : ""}">
+    <span class="msg-ico">${sup ? WALL_CROWN : WALL_USER}</span>
+    <div class="msg-c">
+      <div class="msg-name">${escapeHtml(m.name)}${sup ? '<span class="msg-badge">supporter</span>' : ""}</div>
+      <div class="msg-body">${escapeHtml(m.body)}</div>
+    </div>
+  </div>`;
+}
+
+async function loadWall() {
+  const grid = document.getElementById("wallGrid");
+  if (!grid) return;
+  try {
+    const r = await fetch(
+      `${SUPA_URL}/rest/v1/messages?select=name,body,is_supporter&order=created_at.desc&limit=48`,
+      { headers: SUPA_HEAD });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const rows = await r.json();
+    grid.innerHTML = rows.length
+      ? rows.map(renderMsg).join("")
+      : `<p class="wall2-empty">No messages yet. Be the first to leave one!</p>`;
+  } catch (e) {
+    grid.innerHTML = `<p class="wall2-empty">Messages will show up here.</p>`;
+  }
+}
+
+async function postWall(e) {
+  e.preventDefault();
+  const nameEl = document.getElementById("wallName");
+  const bodyEl = document.getElementById("wallBody");
+  const status = document.getElementById("wallStatus");
+  const name = nameEl.value.trim(), body = bodyEl.value.trim();
+  if (!name || !body) return;
+  const last = +localStorage.getItem("vs_last_post") || 0;
+  if (Date.now() - last < 25000) {
+    status.textContent = "Easy there — wait a few seconds between messages.";
+    return;
+  }
+  const btn = e.target.querySelector("button[type=submit]");
+  btn.disabled = true; status.textContent = "Posting…";
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/messages`, {
+      method: "POST",
+      headers: { ...SUPA_HEAD, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify({ name, body }),
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    localStorage.setItem("vs_last_post", String(Date.now()));
+    bodyEl.value = "";
+    status.textContent = "Posted! Thank you.";
+    setTimeout(() => { status.textContent = ""; }, 3500);
+    loadWall();
+  } catch (err) {
+    status.textContent = "Couldn't post right now — please try again in a moment.";
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function wireWall() {
+  const form = document.getElementById("wallForm");
+  if (!form) return;
+  form.addEventListener("submit", postWall);
+  loadWall();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderWall();
   renderTicker();
@@ -166,4 +243,5 @@ document.addEventListener("DOMContentLoaded", () => {
   wireDonation();
   wireNav();
   wireMobileMenu();
+  wireWall();
 });
