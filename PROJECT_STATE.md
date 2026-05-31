@@ -18,6 +18,13 @@ Last updated: 2026-05-30
 - TESTED win32-removal hypothesis earlier: DISPROVEN (stripped build 3/71 incl Microsoft; shipped 1/69).
 - VT remediation remaining: submit Bkav false-positive report (drafted); code-signing = full fix.
 
+## DOMAIN LIVE (2026-05-31)
+- vidsnag.xyz is LIVE with HTTPS. Porkbun DNS: deleted parking (ALIAS@→pixie, CNAME*→pixie),
+  added A @→76.76.21.21 + CNAME www→cname.vercel-dns.com (kept Porkbun nameservers). DNS
+  propagated fast; Vercel cert provisioned after a `vercel --prod` redeploy nudge (it had
+  stalled despite HTTP 200). http→https 308 redirect works. www.vidsnag.xyz added to Vercel
+  project (cert provisioning). The 86MB build is the live download; site fully live on the real domain.
+
 ## Current milestone
 App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all live on Vercel prod alias. Free trust signals shipped (open-source + VirusTotal + checksum). Remaining: donate wiring (needs user link), DNS, merge branch, free code-signing.
 
