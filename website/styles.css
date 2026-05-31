@@ -83,6 +83,29 @@ h2{text-align:center;font-size:clamp(26px,4vw,40px);margin-bottom:8px}
   color:var(--accent);box-shadow:inset 0 -1.5px 0 #CDBBF6;transition:color .15s,box-shadow .15s}
 .ghost-link:hover{color:var(--accent-press);box-shadow:inset 0 -1.5px 0 var(--accent)}
 
+/* hero reciprocity cue + sticky support FAB */
+.hero-support{display:inline-flex;align-items:center;gap:9px;margin:18px auto 0;cursor:pointer;max-width:100%;
+  font-family:"Nunito";font-weight:700;font-size:14px;color:var(--ink);background:#fff;
+  border:1.5px solid #EFE3FA;border-radius:999px;padding:9px 17px;
+  box-shadow:0 12px 26px -16px rgba(124,92,252,.6);transition:transform .15s,border-color .15s,box-shadow .15s}
+.hero-support:hover{transform:translateY(-2px);border-color:var(--accent-2);box-shadow:0 16px 30px -14px rgba(124,92,252,.7)}
+.hero-support b{color:var(--accent);font-family:"Baloo 2";font-weight:800;white-space:nowrap}
+.hero-support .hs-heart{width:16px;height:16px;fill:#F25F9C;stroke:none;flex-shrink:0;animation:beat 1.8s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}}
+
+.support-fab{position:fixed;right:18px;bottom:18px;z-index:60;display:inline-flex;align-items:center;gap:8px;
+  font-family:"Baloo 2";font-weight:800;font-size:15px;color:#fff;border:none;cursor:pointer;
+  padding:13px 19px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 16px 32px -10px rgba(124,92,252,.85);transition:transform .16s,box-shadow .16s;animation:fabIn .45s .9s both}
+.support-fab:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 20px 38px -10px rgba(124,92,252,.95)}
+.support-fab .sf-heart{width:18px;height:18px;fill:#fff;stroke:none;animation:beat 1.6s ease-in-out infinite}
+@keyframes fabIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (max-width:520px){
+  .support-fab{padding:14px;right:14px;bottom:14px}
+  .support-fab span{display:none}
+  .hero-support{font-size:13px;padding:8px 14px}
+}
+
 /* fake paste teaser */
 .paste{display:flex;align-items:center;gap:11px;max-width:540px;margin:30px auto 0;cursor:default;
   user-select:none;background:var(--card);border:1px solid #ECE3F5;border-radius:16px;padding:9px 9px 9px 16px;

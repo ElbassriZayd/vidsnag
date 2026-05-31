@@ -103,6 +103,16 @@ function wireButtons() {
       openModal("donate");
     });
   }
+  // hero reciprocity cue + sticky FAB → same donate flow (no preset amount)
+  ["heroSupport", "supportFab"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", () => {
+      if (DONATE_URL) { window.location.href = DONATE_URL; return; }
+      donateAmount = null;
+      openModal("donate");
+    });
+  });
 }
 
 // ---- donation amount picker (tiers + custom) ----
