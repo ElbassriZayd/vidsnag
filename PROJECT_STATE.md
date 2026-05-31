@@ -4,6 +4,20 @@ Last updated: 2026-05-30
 
 ---
 
+## Security audit + hardening (2026-05-30)
+- DEEP AUDIT of everything shipped in the exe: NO backdoor / exfiltration / telemetry / eval/exec /
+  subprocess / sockets / persistence / obfuscation. App = thin yt-dlp wrapper. Only network =
+  yt-dlp downloads (intended) + video thumbnail preview + (was) Google Fonts.
+- HARDENED: bundled UI fonts locally (app/web/fonts.css + assets/fonts/*.woff2 latin subset) →
+  app now makes ZERO external requests for its own UI. Removed Google Fonts CDN call.
+- pip-audit: runtime deps clean; upgraded setuptools (build-only) → "No known vulnerabilities".
+- Published SECURITY.md on public repo (network disclosure, audit, verify guide, AV-FP explainer).
+- Rebuilt hardened exe (184.7MB), re-released v0.1.0. NEW SHA-256
+  83327bb418a2633bd017cd291dcf9e5056f7591b9d4b2a90e5289b2d06460080. VirusTotal re-scan = 1/69
+  (Bkav FP only; Microsoft Defender + all majors clean). Site VT link updated to new hash.
+- TESTED win32-removal hypothesis earlier: DISPROVEN (stripped build 3/71 incl Microsoft; shipped 1/69).
+- VT remediation remaining: submit Bkav false-positive report (drafted); code-signing = full fix.
+
 ## Current milestone
 App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all live on Vercel prod alias. Free trust signals shipped (open-source + VirusTotal + checksum). Remaining: donate wiring (needs user link), DNS, merge branch, free code-signing.
 
