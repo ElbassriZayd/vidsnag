@@ -44,6 +44,7 @@ jobs:
             --onefile `
             --assume-yes-for-downloads `
             --msvc=latest `
+            --enable-plugin=pywebview `
             --windows-console-mode=disable `
             --windows-icon-from-ico=app/web/assets/vidsnag.ico `
             --include-data-dir=app/web=app/web `
@@ -51,14 +52,6 @@ jobs:
             --include-data-files=ffbin/ffprobe.exe=app/ffprobe.exe `
             --include-package=yt_dlp `
             --include-package-data=yt_dlp `
-            --include-package=webview `
-            --include-package-data=webview `
-            --include-package=clr_loader `
-            --include-package-data=clr_loader `
-            --include-package=pythonnet `
-            --include-module=clr `
-            --include-package=bottle `
-            --include-package=proxy_tools `
             --product-name=VidSnag `
             --product-version=0.1.1 `
             --file-version=0.1.1.0 `
