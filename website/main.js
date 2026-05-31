@@ -91,56 +91,55 @@ function wireButtons() {
     a.setAttribute("href", "#download");
     a.addEventListener("click", e => { e.preventDefault(); openModal("download"); });
   });
-  const donate = document.getElementById("donate");
-  if (donate) {
-    donate.addEventListener("click", e => {
-      if (DONATE_URL) {
-        const url = DONATE_URL + (donateAmount ? `?amount=${encodeURIComponent(donateAmount)}` : "");
-        donate.setAttribute("href", url);
-        return; // let the anchor navigate
-      }
-      e.preventDefault();
-      openModal("donate");
-    });
-  }
-  // hero reciprocity cue + sticky FAB → same donate flow (no preset amount)
-  ["heroSupport", "supportFab"].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener("click", () => {
-      if (DONATE_URL) { window.location.href = DONATE_URL; return; }
-      donateAmount = null;
-      openModal("donate");
-    });
+  // sticky button → reveal the inline give widget (no modal, no navigation)
+  const fab = document.getElementById("supportFab");
+  if (fab) fab.addEventListener("click", () => {
+    const give = document.getElementById("give");
+    if (give) give.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 }
 
 // ---- donation amount picker (tiers + custom) ----
+// Each .donate-pick is a self-contained interactive widget (tiers + custom + go).
+// Works inline with no modal/navigation; the chosen amount is scoped per widget.
 function wireDonation() {
-  const tiers = Array.from(document.querySelectorAll(".tier"));
-  const custom = document.getElementById("customAmt");
-  const label = document.getElementById("donateLabel");
-  const setLabel = () => { if (label) label.textContent = donateAmount ? `Chip in $${donateAmount}` : "Chip in"; };
-  const select = (amt, fromTier) => {
-    donateAmount = amt || null;
+  document.querySelectorAll(".donate-pick").forEach(scope => {
+    const tiers = Array.from(scope.querySelectorAll(".tier"));
+    const custom = scope.querySelector(".custom-amt-input");
+    const label = scope.querySelector(".donate-label");
+    const go = scope.querySelector(".donate-go");
+    scope._amt = null;
+    const setLabel = () => { if (label) label.textContent = scope._amt ? `Chip in $${scope._amt}` : "Chip in"; };
+    const select = (amt, fromTier) => {
+      scope._amt = amt || null;
+      tiers.forEach(t => {
+        const on = fromTier === t;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-pressed", String(on));
+      });
+      if (fromTier && custom) custom.value = "";
+      setLabel();
+    };
     tiers.forEach(t => {
-      const on = fromTier === t;
-      t.classList.toggle("active", on);
-      t.setAttribute("aria-pressed", String(on));
+      t.setAttribute("aria-pressed", "false");
+      t.addEventListener("click", () => select(t.dataset.amt, t));
     });
-    if (fromTier && custom) custom.value = "";
-    setLabel();
-  };
-  tiers.forEach(t => {
-    t.setAttribute("aria-pressed", "false");
-    t.addEventListener("click", () => select(t.dataset.amt, t));
-  });
-  if (custom) custom.addEventListener("input", () => {
-    const v = custom.value.replace(/[^\d.]/g, "");
-    custom.value = v;
-    tiers.forEach(t => { t.classList.remove("active"); t.setAttribute("aria-pressed", "false"); });
-    donateAmount = v || null;
-    setLabel();
+    if (custom) custom.addEventListener("input", () => {
+      const v = custom.value.replace(/[^\d.]/g, "");
+      custom.value = v;
+      tiers.forEach(t => { t.classList.remove("active"); t.setAttribute("aria-pressed", "false"); });
+      scope._amt = v || null;
+      setLabel();
+    });
+    if (go) go.addEventListener("click", e => {
+      if (DONATE_URL) {
+        window.location.href = DONATE_URL + (scope._amt ? `?amount=${encodeURIComponent(scope._amt)}` : "");
+        return;
+      }
+      e.preventDefault();
+      donateAmount = scope._amt;
+      openModal("donate");
+    });
   });
 }
 
