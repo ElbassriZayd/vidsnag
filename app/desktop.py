@@ -14,14 +14,16 @@ from app import engine
 
 
 def _res(*parts):
-    """Resolve a bundled resource both from source and from the frozen build.
+    """Resolve a bundled resource from source, PyInstaller, or Nuitka.
 
-    When packaged by PyInstaller (onefile), web/ ships at app/web under the
-    extraction dir (sys._MEIPASS); from source it sits next to this file.
+    PyInstaller (onefile) ships web/ at app/web under sys._MEIPASS. Nuitka and
+    source runs resolve relative to this module (Nuitka rewrites __file__ to the
+    unpacked location).
     """
-    if getattr(sys, "frozen", False):
-        return os.path.join(sys._MEIPASS, "app", *parts)
-    return os.path.join(os.path.dirname(__file__), *parts)
+    base = getattr(sys, "_MEIPASS", None)
+    if base:
+        return os.path.join(base, "app", *parts)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), *parts)
 
 
 HTML_PATH = _res("web", "index.html")
