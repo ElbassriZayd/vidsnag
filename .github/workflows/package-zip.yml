@@ -1,0 +1,47 @@
+name: package-zip
+
+# Wraps the released .exe in a .zip. Browsers block a bare unsigned .exe far
+# more aggressively than a .zip, so this gives users a download that actually
+# completes (they extract + Run anyway). Temporary measure until code-signing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download released exe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download v0.1.0 -R ${{ github.repository }} -p VidSnag.exe --clobber
+
+      - name: Build zip with a readme
+        run: |
+          mkdir -p pkg
+          cp VidSnag.exe pkg/VidSnag.exe
+          cat > pkg/READ-ME-FIRST.txt <<'TXT'
+          VidSnag - free video downloader (https://vidsnag.xyz)
+
+          HOW TO RUN
+          1. Double-click VidSnag.exe.
+          2. Windows may say "Windows protected your PC" because the app is new
+             and not code-signed yet. This is NOT a virus.
+          3. Click "More info" -> "Run anyway".
+
+          WHY YOU CAN TRUST IT
+          - Open source - read every line: https://github.com/ElbassriZayd/vidsnag
+          - VirusTotal: Microsoft Defender and all major engines pass it.
+          - It runs entirely on your computer. Nothing is uploaded.
+
+          You are responsible for what you download. Respect copyright.
+          TXT
+          cd pkg && zip -r ../VidSnag.zip . && cd ..
+          ls -la VidSnag.zip
+
+      - name: Upload zip to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload v0.1.0 VidSnag.zip -R ${{ github.repository }} --clobber
