@@ -25,6 +25,16 @@ Last updated: 2026-05-30
   stalled despite HTTP 200). http→https 308 redirect works. www.vidsnag.xyz added to Vercel
   project (cert provisioning). The 86MB build is the live download; site fully live on the real domain.
 
+## Community message wall — LIVE (2026-05-31)
+- Supabase project `qkdodbsjwnebyglqjgqr` (org elbassrizayd8@gmail.com, region eu-central-1/Frankfurt, FREE).
+  URL https://qkdodbsjwnebyglqjgqr.supabase.co. anon key is in website/main.js (public by design).
+- Table `public.messages` (name/body/is_supporter/is_hidden/created_at) + RLS: read non-hidden, anyone
+  can INSERT but check blocks self-granting is_supporter/is_hidden (verified: 42501 on cheat attempt). SQL in db/messages_table.sql.
+- Frontend: "Leave your mark on the wall" section under the hero — post form + live feed via Supabase REST
+  (fetch, no library), XSS-escaped, client 25s rate-limit, graceful empty state. Supporters get gold crown badge.
+- Grant a badge: Supabase Table Editor → messages → set is_supporter=true. Moderate: set is_hidden=true.
+- TODO later: auto-grant badge from USDT tx; server-side rate-limit (currently client-only); donate flow has no auto nickname↔message link.
+
 ## Current milestone
 App PACKAGED + RELEASED (v0.1.0) and landing REDESIGNED + working Download, all live on Vercel prod alias. Free trust signals shipped (open-source + VirusTotal + checksum). Remaining: donate wiring (needs user link), DNS, merge branch, free code-signing.
 
