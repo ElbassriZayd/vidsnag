@@ -10,6 +10,11 @@ const SUPA_URL = "https://qkdodbsjwnebyglqjgqr.supabase.co";
 const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrZG9kYnNqd25lYnlnbHFqZ3FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDA4NTUsImV4cCI6MjA5NTgxNjg1NX0.nKCcYCNPatJM-P1gwqal6IzHJp0JnD9OD_QiK1Pc6IA";
 const SUPA_HEAD = { apikey: SUPA_ANON, Authorization: "Bearer " + SUPA_ANON };
 
+// Monthly donations bar. Paste a free BscScan API key (bscscan.com/myapikey) to
+// show live on-chain totals; until then the bar shows a friendly CTA.
+const BSCSCAN_KEY = "";
+const USDT_BSC_CONTRACT = "0x55d398326f99059fF775485246999027B3197955"; // USDT (BEP20), 18 decimals
+
 // Founding supporters (no dollar amounts — hearts only). Real Ko-fi donors will
 // later be appended by the backend WITH amounts and mix in among these.
 const FOUNDING = [
@@ -252,6 +257,28 @@ function wireWall() {
   setInterval(loadWall, 20000); // live refresh
 }
 
+// ---- monthly donations bar (BscScan) ----
+async function loadDonationBar() {
+  const el = document.getElementById("dbarText");
+  if (!el || !BSCSCAN_KEY) return; // no key yet → keep the default CTA
+  try {
+    const url = `https://api.bscscan.com/api?module=account&action=tokentx`
+      + `&contractaddress=${USDT_BSC_CONTRACT}&address=${USDT_BEP20}`
+      + `&page=1&offset=1000&sort=desc&apikey=${BSCSCAN_KEY}`;
+    const j = await (await fetch(url)).json();
+    if (j.status !== "1" || !Array.isArray(j.result)) return;
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000;
+    const incoming = j.result.filter(t =>
+      t.to && t.to.toLowerCase() === USDT_BEP20.toLowerCase() && +t.timeStamp >= monthStart);
+    const total = incoming.reduce((s, t) => s + Number(t.value) / 1e18, 0);
+    const n = incoming.length;
+    el.innerHTML = n
+      ? `<b>$${total < 100 ? total.toFixed(2) : Math.round(total)}</b> from <b>${n}</b> supporter${n > 1 ? "s" : ""} this month`
+      : `Be the first to support VidSnag this month`;
+  } catch (e) { /* keep default CTA */ }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderWall();
   renderTicker();
@@ -261,4 +288,5 @@ document.addEventListener("DOMContentLoaded", () => {
   wireNav();
   wireMobileMenu();
   wireWall();
+  loadDonationBar();
 });
