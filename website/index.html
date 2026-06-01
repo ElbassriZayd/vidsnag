@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="styles.css?v=5" />
 <link rel="icon" href="assets/logo-64.png" type="image/png" />
 <script type="application/ld+json">
 {
@@ -96,17 +96,21 @@
       </div>
     </section>
 
-    <!-- COMMUNITY MESSAGE WALL -->
+    <!-- COMMUNITY CHAT -->
     <section class="wall2" id="wall-section">
-      <h2>Leave your mark on the wall</h2>
-      <p class="wall2-sub">Say hi, drop a thank-you, or request a feature. Everyone can post, and supporters get a badge.</p>
-      <form class="wall2-form" id="wallForm" autocomplete="off">
-        <input id="wallName" class="wall2-name" maxlength="24" placeholder="Your name" aria-label="Your name" required />
-        <input id="wallBody" class="wall2-body" maxlength="200" placeholder="Write something nice…" aria-label="Your message" required />
-        <button type="submit" class="btn-cta wall2-post">Post</button>
-      </form>
+      <h2>The community chat</h2>
+      <p class="wall2-sub">Leave a message, request a feature, or just say hi. Supporters get a gold badge.</p>
+      <div class="chat">
+        <div class="chat-feed" id="wallGrid"></div>
+        <form class="chat-bar" id="wallForm" autocomplete="off">
+          <input id="wallName" class="chat-name" maxlength="24" placeholder="Name" aria-label="Your name" required />
+          <input id="wallBody" class="chat-body" maxlength="200" placeholder="Type a message…" aria-label="Your message" required />
+          <button type="submit" class="chat-send" aria-label="Send message">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7-7-1z"/></svg>
+          </button>
+        </form>
+      </div>
       <p class="wall2-status" id="wallStatus" role="status" aria-live="polite"></p>
-      <div class="wall2-grid" id="wallGrid"></div>
     </section>
 
     <!-- SUPPORTERS TICKER -->
@@ -297,7 +301,7 @@
     </div>
   </dialog>
 
-  <script src="main.js?v=4" defer></script>
+  <script src="main.js?v=5" defer></script>
 
   <script type="application/ld+json">
   {

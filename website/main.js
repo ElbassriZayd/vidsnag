@@ -163,36 +163,51 @@ function wireMobileMenu() {
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 }
 
-// ---- community message wall (Supabase) ----
-const WALL_USER = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>';
+// ---- community chat (Supabase), Discord-style ----
 const WALL_CROWN = '<svg viewBox="0 0 24 24"><path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/><path d="M5 20h14"/></svg>';
+
+function avColor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 360;
+  return `hsl(${h}, 62%, 56%)`;
+}
 
 function renderMsg(m) {
   const sup = !!m.is_supporter;
-  return `<div class="msg${sup ? " sup" : ""}">
-    <span class="msg-ico">${sup ? WALL_CROWN : WALL_USER}</span>
-    <div class="msg-c">
-      <div class="msg-name">${escapeHtml(m.name)}${sup ? '<span class="msg-badge">supporter</span>' : ""}</div>
-      <div class="msg-body">${escapeHtml(m.body)}</div>
+  const nm = (m.name || "").trim() || "anon";
+  const col = sup ? "#C28A12" : avColor(nm);
+  const av = sup
+    ? `<span class="cmsg-av sup">${WALL_CROWN}</span>`
+    : `<span class="cmsg-av" style="background:${col}">${escapeHtml(nm[0].toUpperCase())}</span>`;
+  return `<div class="cmsg${sup ? " sup" : ""}">${av}
+    <div class="cmsg-b">
+      <div class="cmsg-head"><span class="cmsg-name" style="color:${col}">${escapeHtml(nm)}</span>${sup ? '<span class="msg-badge">supporter</span>' : ""}</div>
+      <div class="cmsg-text">${escapeHtml(m.body)}</div>
     </div>
   </div>`;
 }
 
 async function loadWall() {
-  const grid = document.getElementById("wallGrid");
-  if (!grid) return;
+  const feed = document.getElementById("wallGrid");
+  if (!feed) return;
   try {
     const r = await fetch(
-      `${SUPA_URL}/rest/v1/messages?select=name,body,is_supporter&order=created_at.desc&limit=48`,
+      `${SUPA_URL}/rest/v1/messages?select=name,body,is_supporter&order=created_at.desc&limit=60`,
       { headers: SUPA_HEAD });
     if (!r.ok) throw new Error("HTTP " + r.status);
-    const rows = await r.json();
-    grid.innerHTML = rows.length
+    const rows = (await r.json()).reverse(); // chronological, newest at the bottom (chat order)
+    const wasAtBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 70;
+    feed.innerHTML = rows.length
       ? rows.map(renderMsg).join("")
-      : `<p class="wall2-empty">No messages yet. Be the first to leave one!</p>`;
+      : `<p class="wall2-empty">No messages yet — be the first to say hi!</p>`;
+    if (rows.length && wasAtBottom) feed.scrollTop = feed.scrollHeight;
   } catch (e) {
-    grid.innerHTML = `<p class="wall2-empty">Messages will show up here.</p>`;
+    feed.innerHTML = `<p class="wall2-empty">Chat will show up here.</p>`;
   }
+}
+function scrollChatBottom() {
+  const feed = document.getElementById("wallGrid");
+  if (feed) feed.scrollTop = feed.scrollHeight;
 }
 
 async function postWall(e) {
@@ -220,7 +235,8 @@ async function postWall(e) {
     bodyEl.value = "";
     status.textContent = "Posted! Thank you.";
     setTimeout(() => { status.textContent = ""; }, 3500);
-    loadWall();
+    await loadWall();
+    scrollChatBottom();
   } catch (err) {
     status.textContent = "Couldn't post right now — please try again in a moment.";
   } finally {
@@ -232,7 +248,8 @@ function wireWall() {
   const form = document.getElementById("wallForm");
   if (!form) return;
   form.addEventListener("submit", postWall);
-  loadWall();
+  loadWall().then(scrollChatBottom);
+  setInterval(loadWall, 20000); // live refresh
 }
 
 document.addEventListener("DOMContentLoaded", () => {
