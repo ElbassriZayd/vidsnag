@@ -252,20 +252,15 @@ function wireWall() {
   setInterval(loadWall, 20000); // live refresh
 }
 
-// ---- monthly donations bar (counts supporters badged this month, via Supabase) ----
+// ---- monthly donations bar (real on-chain USDT via /api/donations) ----
 async function loadDonationBar() {
   const el = document.getElementById("dbarText");
   if (!el) return;
   try {
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-    const r = await fetch(
-      `${SUPA_URL}/rest/v1/messages?select=id&is_supporter=eq.true&created_at=gte.${encodeURIComponent(monthStart)}`,
-      { headers: SUPA_HEAD });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const n = (await r.json()).length;
+    const j = await (await fetch("/api/donations")).json();
+    const n = j.count || 0, total = j.total || 0;
     el.innerHTML = n
-      ? `<b>${n}</b> supporter${n > 1 ? "s" : ""} chipped in this month — thank you!`
+      ? `<b>$${total < 100 ? total.toFixed(2) : Math.round(total)}</b> from <b>${n}</b> supporter${n > 1 ? "s" : ""} this month`
       : `Be the first to support VidSnag this month`;
   } catch (e) { /* keep the default CTA text */ }
 }
