@@ -97,8 +97,26 @@ def _ydl_opts(mode, height, output_dir, progress_hook):
                 "preferredquality": "192",
             }],
         }
-    fmt = "bv*+ba/b" if height is None else f"bv*[height<={height}]+ba/b/b[height<={height}]"
-    return {**base, "format": fmt, "merge_output_format": "mp4"}
+
+    # Prefer widely-compatible codecs (H.264 video + AAC/m4a audio) so the result
+    # plays in Windows Media Player and everywhere else. YouTube's "best" streams
+    # are often av1 video + opus audio, which technically have sound but most
+    # Windows players can't decode -> looks like "video with no voice". We fall
+    # back to best-available only if compatible streams don't exist.
+    cap = "" if height is None else f"[height<={height}]"
+    fmt = (
+        f"bv*{cap}[vcodec^=avc1]+ba[acodec^=mp4a]/"   # H.264 + AAC (most compatible)
+        f"bv*{cap}[ext=mp4]+ba[ext=m4a]/"             # any mp4 video + m4a audio
+        f"bv*{cap}+ba/"                               # any video + any audio
+        f"b{cap}/b"                                    # last resort: single file
+    )
+    return {
+        **base,
+        "format": fmt,
+        "merge_output_format": "mp4",
+        # If a merge still ends up with a codec mp4 dislikes, re-encode audio to AAC.
+        "postprocessor_args": {"merger": ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k"]},
+    }
 
 
 def download(url, mode="video", height=None, output_dir=DEFAULT_OUTPUT_DIR, progress_hook=None):
